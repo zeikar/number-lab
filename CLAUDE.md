@@ -38,7 +38,7 @@ Every experiment is a machine from the same lab: an old calculating machine's gr
 - Canvas drawing reads the tokens at draw time and redraws when the colour scheme changes.
 - Type: Bricolage Grotesque for text and digit keys (narrow `wdth` for keys and headings); Courier Prime only for printed output, like the tape, formulas and coordinates.
 - Buttons are `.key` (filled) and `.key--plain` (outlined).
-- It has to work at phone width: people arrive from Shorts.
+- It has to work at phone width.
 
 ## Behaviour
 
