@@ -1,0 +1,124 @@
+/* The golden angle: the seed head, and the controls that set its turn. */
+
+/* Phone: intro, head, controls. Desktop: intro and controls left, the head on the right. */
+.garden {
+  row-gap: 28px;
+  grid-template-areas: 'intro' 'head' 'controls';
+}
+
+.garden .intro {
+  grid-area: intro;
+  margin-bottom: 0;
+}
+
+.head-panel {
+  grid-area: head;
+  padding: 14px;
+}
+
+.controls {
+  grid-area: controls;
+}
+
+@media (min-width: 980px) {
+  .garden {
+    grid-template-areas: 'intro head' 'controls head';
+    grid-template-rows: auto 1fr;
+  }
+}
+
+.head-panel canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+/* The controls */
+
+.entry input {
+  max-width: 12ch;
+  letter-spacing: 0.04em;
+}
+
+.slider {
+  display: block;
+  width: 100%;
+  margin: 18px 0 0;
+  accent-color: var(--key);
+}
+
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.presets .key {
+  min-height: 40px;
+  padding: 0 14px;
+  font-size: 1.05rem;
+}
+
+.seed-row {
+  margin-top: 22px;
+}
+
+.seed-row label {
+  font-weight: 650;
+}
+
+.seed-row .slider {
+  margin-top: 8px;
+}
+
+.readout {
+  display: grid;
+  gap: 10px;
+  margin: 22px 0 0;
+}
+
+.readout div {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.8fr) 2fr;
+  gap: 4px 14px;
+  align-items: baseline;
+}
+
+.readout dt {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.readout dd {
+  margin: 0;
+  font: 400 1rem/1.4 var(--print);
+  overflow-wrap: anywhere;
+}
+
+.gap-bar {
+  display: block;
+  width: min(100%, 12rem);
+  height: 8px;
+  margin-top: 6px;
+  border-radius: 4px;
+  background: var(--rule);
+}
+
+.gap-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--ink);
+}
+
+.controls .verdict {
+  min-height: 4.65em;
+  margin-top: 20px;
+}
+
+.grow {
+  width: 100%;
+  margin-top: 8px;
+}

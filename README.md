@@ -30,6 +30,14 @@ Type a number and the machine folds the number line from 0 to n in half, so ever
 
 Based on Numberphile's [Goldbach Conjecture](https://www.youtube.com/watch?v=MxiTG96QOxw).
 
+### [The golden angle](https://zeikar.dev/number-lab/sunflower/)
+
+Drop a seed, turn by a fixed fraction of a turn, drop the next one a little further out, and keep going. Most turns pile the seeds into arms; turn by 0.618034…, the golden ratio's fractional part, and they pack evenly at every size, like a sunflower head.
+
+Drag the turn, type one (a decimal, a fraction, `pi`, `e`, `phi`, `√2`), or try a preset, and the seed head redraws live. It counts the arms at the edge, lists the fractions the turn is close to, and measures how close the nearest two seeds get. 0.618 sits next to φ: it looks golden with 500 seeds, but it's exactly 309/500, which hugs 55/89 closer than φ does, and by 3,000 seeds its 89 arms open up gaps. **Grow it seed by seed** lays the seeds down one at a time with the arm turning between them. Links like `sunflower/#t=pi&n=3000` set the turn and the seed count.
+
+Based on Numberphile's [The Golden Ratio (why it is so irrational)](https://www.youtube.com/watch?v=sj8Sg8qnjOg).
+
 ## Run locally
 
 No build step. Serve the folder with any static server:
