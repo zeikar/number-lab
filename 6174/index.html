@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>6174, Kaprekar's constant | Number Lab</title>
+  <meta name="description" content="Sort four digits largest first and smallest first, subtract, repeat. Run a number to 6174, or watch all 10,000 four-digit numbers collapse onto it at once.">
+  <link rel="canonical" href="https://zeikar.dev/number-lab/6174/">
+  <link rel="icon" href="../favicon.svg">
+  <meta name="theme-color" content="#d5dbd3" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1b201e" media="(prefers-color-scheme: dark)">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zeikar.dev/number-lab/6174/">
+  <meta property="og:title" content="6174, Kaprekar's constant">
+  <meta property="og:description" content="Sort four digits largest first and smallest first, subtract, repeat. Unless all four digits are the same, every four-digit number lands on 6174 within seven rounds.">
+  <meta property="og:image" content="https://zeikar.dev/number-lab/6174/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="7641 minus 1467 equals 6174 on digit keys, beside a map of all 10,000 four-digit numbers shaded by how many rounds they take.">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Courier+Prime:wght@400;700&display=swap">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <div class="page">
+    <nav class="lab-bar" aria-label="Site">
+      <a href="../">Number Lab</a>
+      <a href="https://zeikar.dev/">zeikar.dev</a>
+    </nav>
+
+    <noscript><p class="noscript">The machine and the map need JavaScript to run.</p></noscript>
+
+    <main class="toy">
+      <div class="bench">
+        <header class="intro">
+          <h1>Kaprekar's constant</h1>
+          <p class="lede">Take four digits that aren't all the same. Arrange them largest first, then smallest first, and subtract. Do it again with the answer. Within seven rounds you reach 6174, and 6174 only ever gives back 6174.</p>
+        </header>
+
+        <section class="machine" aria-labelledby="machine-title">
+          <h2 id="machine-title" class="visually-hidden">Run a number</h2>
+          <form class="entry" id="entry" novalidate>
+            <label for="digits">Your four digits</label>
+            <div class="entry-row">
+              <input id="digits" name="digits" type="text" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="3524" aria-describedby="hint">
+              <button type="submit" class="key">Run</button>
+              <button type="button" class="key key--plain" id="random">Random</button>
+            </div>
+            <p class="hint" id="hint" aria-live="polite">Fewer than four digits get zeros in front, so 21 runs as 0021.</p>
+          </form>
+
+          <div class="works" id="works" aria-hidden="true">
+            <div class="row" data-row="big"></div>
+            <div class="row row--minus" data-row="small"></div>
+            <div class="rule"></div>
+            <div class="row" data-row="next"></div>
+          </div>
+
+          <p class="verdict" id="verdict" aria-live="polite">7641 − 1467 = 6174, right back where it started. Type four digits that aren't all the same to send them here.</p>
+
+          <div class="tape-slot" id="tape-slot" hidden>
+            <ol class="tape" id="tape" aria-label="Rounds"></ol>
+          </div>
+        </section>
+      </div>
+
+      <section class="atlas" aria-labelledby="atlas-title">
+        <h2 id="atlas-title">All 10,000 at once</h2>
+        <p class="atlas-lede">Each square is one number, 0000 at the top left to 9999 at the bottom right, shaded by how many rounds it takes. Point at one to see its route; tap it to run it.</p>
+
+        <div class="map-frame" id="map-frame">
+          <canvas id="map" role="img" aria-label="A 100 by 100 grid of all four-digit numbers, shaded by rounds to reach 6174. Three and seven rounds are the most common; the ten repdigits are grey."></canvas>
+          <div class="map-tip" id="map-tip" hidden></div>
+          <span class="corner corner--tl" aria-hidden="true">0000</span>
+          <span class="corner corner--tr" aria-hidden="true">0099</span>
+          <span class="corner corner--bl" aria-hidden="true">9900</span>
+          <span class="corner corner--br" aria-hidden="true">9999</span>
+        </div>
+
+        <div class="collapse">
+          <button type="button" class="key" id="run-all">Run all 10,000</button>
+          <p class="collapse-status" id="collapse-status" aria-live="polite">Every number takes its rounds at the same time.</p>
+        </div>
+
+        <figure class="histogram">
+          <figcaption>Rounds to reach 6174</figcaption>
+          <ol class="bars" id="bars"></ol>
+          <ol class="bars-axis" aria-hidden="true"><li>0</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li></ol>
+          <p class="rep-note"><span class="swatch" aria-hidden="true"></span>The ten repdigits, like 1111 and 7777, fall to 0000 and stay there.</p>
+        </figure>
+      </section>
+    </main>
+
+    <section class="notes" aria-labelledby="notes-title">
+      <h2 id="notes-title">Why it gets there so fast</h2>
+      <p>Write the digits largest first as <var>a</var> ≥ <var>b</var> ≥ <var>c</var> ≥ <var>d</var>. One round is</p>
+      <p class="formula"><span>  (1000<var>a</var> + 100<var>b</var> + 10<var>c</var> + <var>d</var>)</span><span>− (1000<var>d</var> + 100<var>c</var> + 10<var>b</var> + <var>a</var>)</span><span>= 999(<var>a</var> − <var>d</var>) + 90(<var>b</var> − <var>c</var>)</span></p>
+      <p>Only the two gaps, <var>a</var> − <var>d</var> and <var>b</var> − <var>c</var>, survive the subtraction, and there are just 55 ways to pick them. So the first round squeezes all 10,000 numbers onto 55 values. That's the first jump when you run all 10,000. Six more rounds drain them all into 6174, except 0000, where the ten repdigits stay.</p>
+      <p>D. R. Kaprekar described the routine in 1949. Three digits do the same thing and stop at 495. With two digits, or five or more, no single number catches them all; they end in loops instead, or split between several.</p>
+    </section>
+
+    <footer class="site-foot">
+      <p>Numberphile tells the story in <a href="https://www.youtube.com/watch?v=d8TRcZklX_Q">6174</a>.</p>
+      <p><a href="../">Number Lab</a> is made by <a href="https://zeikar.dev/">zeikar</a>. <a href="https://github.com/zeikar/number-lab">Source on GitHub</a>.</p>
+    </footer>
+  </div>
+</body>
+</html>
