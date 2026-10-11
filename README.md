@@ -22,6 +22,14 @@ Type a number and the machine slides a copy of its digits into reverse order, ad
 
 Based on Numberphile's [What's special about 196?](https://www.youtube.com/watch?v=bN8PE3eljdA)
 
+### [Goldbach's conjecture](https://zeikar.dev/number-lab/goldbach/)
+
+Every even number above 2 seems to be the sum of two primes. Computers have checked every one up to 4 × 10¹⁸, but nobody has proved it always works.
+
+Type a number and the machine folds the number line from 0 to n in half, so every number sits over the one that adds up to n with it. A column with a prime at both ends lights up red: that's a way. **Check all 49,999** counts the ways for every even number from 4 to 100,000 and plots Goldbach's comet, where multiples of 3 rise in a band about twice as high as the rest. Point at a dot to see its count, and tap it to fold it. Links like `goldbach/#n=100` fold that number.
+
+Based on Numberphile's [Goldbach Conjecture](https://www.youtube.com/watch?v=MxiTG96QOxw).
+
 ## Run locally
 
 No build step. Serve the folder with any static server:

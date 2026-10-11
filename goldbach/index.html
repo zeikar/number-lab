@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Goldbach's conjecture | Number Lab</title>
+  <meta name="description" content="Every even number above 2 seems to be a sum of two primes. Fold the number line to find every way for any number up to 100,000, then count the ways for all 49,999 even ones.">
+  <link rel="canonical" href="https://zeikar.dev/number-lab/goldbach/">
+  <link rel="icon" href="../favicon.svg">
+  <meta name="theme-color" content="#d5dbd3" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1b201e" media="(prefers-color-scheme: dark)">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zeikar.dev/number-lab/goldbach/">
+  <meta property="og:title" content="Goldbach's conjecture">
+  <meta property="og:description" content="Every even number above 2 seems to be a sum of two primes. Fold the number line to find every way, then count the ways for all 49,999 even numbers up to 100,000.">
+  <meta property="og:image" content="https://zeikar.dev/number-lab/goldbach/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The number line from 0 to 28 folded in half, with 5 over 23 and 11 over 17 in red, beside Goldbach's comet: every even number up to 100,000 plotted by how many ways it is a sum of two primes.">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Courier+Prime:wght@400;700&display=swap">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <div class="page">
+    <nav class="lab-bar" aria-label="Site">
+      <a href="../">Number Lab</a>
+      <a href="https://zeikar.dev/">zeikar.dev</a>
+    </nav>
+
+    <noscript><p class="noscript">The fold and the comet need JavaScript to run.</p></noscript>
+
+    <main class="toy">
+      <div class="bench">
+        <header class="intro">
+          <h1>Goldbach's conjecture</h1>
+          <p class="lede">Every even number above 2 seems to be the sum of two primes: 4 = 2 + 2, 28 = 5 + 23, 100 = 3 + 97. Computers have checked every even number up to 4 × 10<sup>18</sup> without finding one that isn't, but nobody has proved that it always works.</p>
+        </header>
+
+        <section class="machine" aria-labelledby="machine-title">
+          <h2 id="machine-title" class="visually-hidden">Fold a number</h2>
+          <form class="entry" id="entry" novalidate>
+            <label for="number">Your number</label>
+            <div class="entry-row">
+              <input id="number" name="number" type="text" inputmode="numeric" autocomplete="off" maxlength="7" placeholder="100" aria-describedby="hint">
+              <button type="submit" class="key">Fold</button>
+              <button type="button" class="key key--plain" id="random">Random</button>
+            </div>
+            <p class="hint" id="hint" aria-live="polite">Any whole number from 2 to 100,000.</p>
+          </form>
+
+          <canvas class="fold" id="fold" role="img" aria-label="The number line from 0 to 28, folded at 14 so each number sits over the one that adds up to 28 with it. Primes are marked, and 2 columns have a prime at both ends."></canvas>
+
+          <p class="verdict" id="verdict" aria-live="polite">28 = 5 + 23 = 11 + 17. Fold the line from 0 to 28 at 14 and every column adds up to 28, so a column with a prime at both ends is a way.</p>
+
+          <div class="tape-slot" id="tape-slot" hidden>
+            <ol class="tape" id="tape" aria-label="Ways"></ol>
+          </div>
+        </section>
+      </div>
+
+      <section class="comet" aria-labelledby="comet-title">
+        <h2 id="comet-title">Goldbach's comet</h2>
+        <p class="section-lede">Each dot is an even number, placed by how many ways it splits into two primes. Multiples of 3 make the upper band: they get about twice as many ways as the rest. Point at a dot to see it, and tap it to fold it.</p>
+
+        <div class="comet-head">
+          <button type="button" class="key" id="count-all">Check all 49,999</button>
+          <p class="comet-status" id="comet-status">Your browser counts the ways for every even number from 4 to 100,000, left to right.</p>
+          <p class="visually-hidden" id="comet-announce" aria-live="polite"></p>
+        </div>
+
+        <div class="comet-frame">
+          <canvas id="comet" role="img" aria-label="Goldbach's comet: even numbers up to 100,000 across, ways to write each as a sum of two primes up. The dots spread into two rising bands, with multiples of 3 in the upper one."></canvas>
+        </div>
+
+        <ul class="legend">
+          <li><span class="swatch swatch--three" aria-hidden="true"></span>Multiples of 3</li>
+          <li><span class="swatch swatch--rest" aria-hidden="true"></span>Other even numbers</li>
+        </ul>
+        <p class="comet-readout" id="comet-readout">Fewest ways: 4, 6, 8 and 12, with one each. Most: 99,330, with 2,168.</p>
+      </section>
+    </main>
+
+    <section class="notes" aria-labelledby="notes-title">
+      <h2 id="notes-title">Why multiples of 3 do better</h2>
+      <p>Every prime above 3 is one more or one less than a multiple of 3. Take an even number that isn't a multiple of 3, like 100. About half the primes are the wrong kind for it: 100 − 7 = 93, a multiple of 3, so it can't be prime. A multiple of 3, like 102, has no wrong kind, because either kind of prime leaves the other kind behind. So multiples of 3 get about twice the chances, and on the right half of the comet they average twice as many ways.</p>
+      <p>5 and 7 do the same on a smaller scale. Multiples of 5 average a third more ways than the rest, and multiples of 7 a fifth more, which is why each band has fainter stripes inside it. G. H. Hardy and J. E. Littlewood turned this into a formula that predicts the comet's shape closely, but a prediction isn't a proof.</p>
+      <p>Christian Goldbach wrote to Leonhard Euler on 7 June 1742 with a guess about splitting numbers into primes; he counted 1 as a prime, as some people did then. In his reply, Euler recalled a simpler version Goldbach had once told him: every even number is a sum of two primes. He called it a theorem he was completely sure of, even though he couldn't prove it. Nobody has proved it since.</p>
+      <p>Nils Pipping checked every even number up to 100,000 by hand in 1938, the same range as the comet here. By 2012 a computer search led by Tomás Oliveira e Silva had checked every even number up to 4 × 10<sup>18</sup>. In 2013 Harald Helfgott published a proof of a weaker version for odd numbers: every odd number above 5 is a sum of three primes.</p>
+      <p>Small numbers have the least room. 4, 6, 8 and 12 have one way each, and 68 is the last with two or fewer: every even number from 70 to 100,000 has at least three.</p>
+    </section>
+
+    <footer class="site-foot">
+      <p>Numberphile tells the story in <a href="https://www.youtube.com/watch?v=MxiTG96QOxw">Goldbach Conjecture</a>, with David Eisenbud.</p>
+      <p><a href="../">Number Lab</a> is made by <a href="https://zeikar.dev/">zeikar</a>. <a href="https://github.com/zeikar/number-lab">Source on GitHub</a>.</p>
+    </footer>
+  </div>
+</body>
+</html>

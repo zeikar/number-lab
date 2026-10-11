@@ -420,6 +420,15 @@ p {
   text-align: center;
 }
 
+/* A colour key's square */
+
+.swatch {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
 /* Notes */
 
 .notes {
