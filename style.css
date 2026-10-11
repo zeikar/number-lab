@@ -178,12 +178,20 @@ p {
 }
 
 .site-foot {
-  max-width: 62ch;
   margin-top: 56px;
   padding-top: 20px;
   border-top: 1px solid var(--rule);
   color: var(--ink-soft);
   font-size: 0.95rem;
+}
+
+.site-foot p {
+  text-wrap: pretty;
+}
+
+/* A link like "Source on GitHub" moves to the next line whole rather than splitting. */
+.site-foot a {
+  white-space: nowrap;
 }
 
 .site-foot p + p {
