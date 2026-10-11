@@ -1,0 +1,217 @@
+/* 196: the reverse-and-add machine, the 196 printout, and the survey of 10,000 numbers. */
+
+.side {
+  display: grid;
+  gap: 56px;
+}
+
+/* The machine. Tiles shrink as the number grows, so a 16-digit sum still fits. */
+
+.works {
+  --slots: 3;
+  --op: 28px;
+  --gap: clamp(3px, calc(40px / var(--slots)), 10px);
+  --tile-w: min(60px, (100cqi - var(--op) - (var(--slots) - 1) * var(--gap)) / var(--slots));
+  --tile-h: calc(var(--tile-w) * 1.3);
+  --row-w: calc(var(--slots) * (var(--tile-w) + var(--gap)) - var(--gap));
+  --move-ms: 520ms;
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 18px 0 16px;
+}
+
+.row,
+.carries {
+  position: relative;
+  box-sizing: content-box;
+  width: var(--row-w);
+  padding-left: var(--op);
+  transition: width var(--move-ms) cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.row {
+  height: var(--tile-h);
+  transition-property: width, height;
+}
+
+.carries {
+  height: 18px;
+  margin-bottom: -4px;
+}
+
+.row--plus::before {
+  content: '+';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: calc(var(--op) - 8px);
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  transform: translateY(-52%);
+}
+
+.rule {
+  width: var(--row-w);
+  height: 3px;
+  margin-left: var(--op);
+  border-radius: 2px;
+  background: var(--ink);
+  transition: width var(--move-ms) cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.works .tile,
+.carry {
+  position: absolute;
+  right: 0;
+  transform: translateX(calc(var(--slot) * -1 * (var(--tile-w) + var(--gap))));
+  transition: transform var(--move-ms) cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.works .tile {
+  top: 0;
+  border-radius: min(10px, calc(var(--tile-w) * 0.2));
+  box-shadow: inset 0 calc(var(--tile-h) * -0.06) 0 color-mix(in srgb, #000 30%, transparent);
+  transition-property: transform, width, height, font-size;
+}
+
+.row[data-row='reversed'] .tile {
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow:
+    inset 0 0 0 2px var(--ink),
+    inset 0 calc(var(--tile-h) * -0.06) 0 color-mix(in srgb, var(--ink) 22%, transparent);
+}
+
+.carry {
+  bottom: 0;
+  width: var(--tile-w);
+  color: var(--ink-soft);
+  font: 700 0.85rem/1 var(--print);
+  text-align: center;
+}
+
+.works.is-still .tile,
+.works.is-still .carry,
+.works.is-still .row,
+.works.is-still .carries,
+.works.is-still .rule {
+  transition: none;
+}
+
+/* The tape prints one sum per step, with the step number on the left. */
+
+.tape li {
+  display: flex;
+  justify-content: space-between;
+  gap: 2ch;
+}
+
+.tape-step {
+  color: var(--ink-soft);
+}
+
+.tape .tape-more {
+  justify-content: flex-end;
+}
+
+/* Room for a three-line verdict, so the tape doesn't jump when it appears. */
+.machine .verdict {
+  min-height: 4.65em;
+}
+
+/* The printout */
+
+.printout-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+  max-width: 560px;
+  margin-bottom: 16px;
+}
+
+.odometer {
+  display: flex;
+  gap: 22px;
+  margin: 0 0 0 auto;
+}
+
+.odometer dt {
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.odometer dd {
+  margin: 0;
+  font: 700 1.45rem/1.1 var(--print);
+  font-variant-numeric: tabular-nums;
+}
+
+.sheet-slot {
+  max-width: 560px;
+  padding-top: 10px;
+  border-top: 6px solid var(--key);
+  border-radius: 3px 3px 0 0;
+}
+
+.sheet-slot canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background: var(--paper);
+}
+
+.printout-status {
+  max-width: 560px;
+  min-height: 3em;
+  margin-top: 14px;
+  font-weight: 600;
+}
+
+/* The survey: 25 step counts, a gap, then the holdouts. */
+
+.bars,
+.bars-axis {
+  grid-template-columns: repeat(25, 1fr) 0.6fr 1.4fr;
+}
+
+.bars .bar {
+  width: min(14px, 72%);
+  border-radius: 3px 3px 0 0;
+}
+
+.bars button:not(:disabled) {
+  cursor: pointer;
+}
+
+.bars button:hover .bar,
+.bars button:focus-visible .bar {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+}
+
+.bars-axis li {
+  white-space: nowrap;
+}
+
+.bars-readout {
+  min-height: 3.1em;
+  margin-top: 14px;
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .works .tile,
+  .carry,
+  .row,
+  .carries,
+  .rule {
+    transition: none;
+  }
+}

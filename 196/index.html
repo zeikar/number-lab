@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>196, reverse and add | Number Lab</title>
+  <meta name="description" content="Write a number backwards and add, until it reads the same both ways. 89 takes 24 steps. 196 has been taken to a billion digits without getting there. Watch your browser try.">
+  <link rel="canonical" href="https://zeikar.dev/number-lab/196/">
+  <link rel="icon" href="../favicon.svg">
+  <meta name="theme-color" content="#d5dbd3" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1b201e" media="(prefers-color-scheme: dark)">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zeikar.dev/number-lab/196/">
+  <meta property="og:title" content="196, reverse and add">
+  <meta property="og:description" content="Write a number backwards and add, until it reads the same both ways. 89 takes 24 steps. 196 has been taken to a billion digits without getting there.">
+  <meta property="og:image" content="https://zeikar.dev/number-lab/196/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="196 plus 691 equals 887 on digit keys, beside a printout of 196's steps that widens into a triangle of digits.">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Courier+Prime:wght@400;700&display=swap">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <div class="page">
+    <nav class="lab-bar" aria-label="Site">
+      <a href="../">Number Lab</a>
+      <a href="https://zeikar.dev/">zeikar.dev</a>
+    </nav>
+
+    <noscript><p class="noscript">The machine and the printout need JavaScript to run.</p></noscript>
+
+    <main class="toy">
+      <div class="bench">
+        <header class="intro">
+          <h1>Reverse and add</h1>
+          <p class="lede">Write a number backwards and add it to the original. Do it again with the answer, and keep going until you get a palindrome, a number that reads the same both ways: 57 + 75 = 132, then 132 + 231 = 363. Most numbers below 10,000 get there in a step or two, but 89 takes 24. Nobody has ever got 196 there, though computers have taken it to a billion digits.</p>
+        </header>
+
+        <section class="machine" aria-labelledby="machine-title">
+          <h2 id="machine-title" class="visually-hidden">Run a number</h2>
+          <form class="entry" id="entry" novalidate>
+            <label for="number">Your number</label>
+            <div class="entry-row">
+              <input id="number" name="number" type="text" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="89" aria-describedby="hint">
+              <button type="submit" class="key">Run</button>
+              <button type="button" class="key key--plain" id="random">Random</button>
+            </div>
+            <p class="hint" id="hint" aria-live="polite">Any whole number from 0 to 9999.</p>
+          </form>
+
+          <div class="works" id="works" aria-hidden="true">
+            <div class="carries" id="carries"></div>
+            <div class="row" data-row="number"></div>
+            <div class="row row--plus" data-row="reversed"></div>
+            <div class="rule"></div>
+            <div class="row" data-row="sum"></div>
+          </div>
+
+          <p class="verdict" id="verdict" aria-live="polite">196 + 691 = 887, and 887 isn't a palindrome, so round it goes again. Type a number to watch it run.</p>
+
+          <div class="tape-slot" id="tape-slot" hidden>
+            <ol class="tape" id="tape" aria-label="Steps"></ol>
+          </div>
+        </section>
+      </div>
+
+      <div class="side">
+        <section class="printout" aria-labelledby="printout-title">
+          <h2 id="printout-title">How far can 196 go?</h2>
+          <p class="section-lede">Your browser keeps reversing and adding, one line per step. Digits that match the digit in their mirror position print in full ink and the rest print faint, so a palindrome would come out as one solid line.</p>
+
+          <div class="printout-head">
+            <button type="button" class="key" id="run-196">Run 196</button>
+            <button type="button" class="key key--plain" id="restart" hidden>Start over</button>
+            <dl class="odometer">
+              <div><dt>Step</dt><dd id="odo-step">0</dd></div>
+              <div><dt>Digits</dt><dd id="odo-digits">3</dd></div>
+            </dl>
+          </div>
+
+          <div class="sheet-slot">
+            <canvas class="torn" id="sheet" role="img" aria-label="196's steps printed one line each. The lines grow by about four digits every ten steps, so the printout widens into a triangle, and no line comes out solid."></canvas>
+          </div>
+          <p class="printout-status" id="printout-status" aria-live="polite">It runs until you pause it. Romain Dolbeau's program got to a billion digits in 2015 and found no palindrome.</p>
+        </section>
+
+        <section class="survey" aria-labelledby="survey-title">
+          <h2 id="survey-title">Every number below 10,000</h2>
+          <p class="section-lede">How many steps each one takes to reach a palindrome. Tap a bar to run a number from it.</p>
+
+          <figure class="histogram">
+            <figcaption>Steps to a palindrome</figcaption>
+            <ol class="bars" id="bars"></ol>
+            <ol class="bars-axis" aria-hidden="true">
+              <li style="grid-column: 1">0</li>
+              <li style="grid-column: 6">5</li>
+              <li style="grid-column: 11">10</li>
+              <li style="grid-column: 16">15</li>
+              <li style="grid-column: 21">20</li>
+              <li style="grid-column: 25">24</li>
+              <li style="grid-column: 27">?</li>
+            </ol>
+            <p class="bars-readout" id="bars-readout">Most need one or two steps, and 89 and 98 need 24. Then a gap, and the question mark: 246 numbers with no palindrome after 1,000 steps.</p>
+          </figure>
+        </section>
+      </div>
+    </main>
+
+    <section class="notes" aria-labelledby="notes-title">
+      <h2 id="notes-title">Why the carries spoil it</h2>
+      <p>Line a number up over its reverse and each column adds the same two digits as its mirror column. In 89 + 98, the ones column is 9 + 8 and the tens column is 8 + 9. If nothing carried, the answer would always be a palindrome, like 123 + 321 = 444.</p>
+      <p>Carries break the mirror. 9 + 8 = 17 writes the 7 and carries the 1 into the tens column, but nothing carries into the ones column, its mirror. So the tens column makes 18, and 89 + 98 = 187. The longer the number, the more columns there are to carry, and the harder it gets for the carries to come out symmetric.</p>
+      <p>A number that never reaches a palindrome is called a Lychrel number, and in base 10 nobody has proved that a single one exists. 196 is the smallest candidate. John Walker set a computer on it in August 1987; it stopped at a built-in limit of a million digits in May 1990, after 2,415,836 steps. Romain Dolbeau's program passed a billion steps in 2011 and reached a billion digits in February 2015. No palindrome turned up, but that proves nothing either way: one could still be further on. In base 2 the question is settled: 10110, which is 22, provably never gets there.</p>
+      <p>Below 1,000 there are 13 numbers that haven't got there: 196, 295, 394, 493, 592, 689, 691, 788, 790, 879, 887, 978 and 986. Most are 196's path in disguise. 887 is its first step, and nine others land on its path after one step, like 295 + 592 = 887. Only 879 and 978 go somewhere else: both make 1857, which 196's path jumps over on its way from 1675 to 7436.</p>
+    </section>
+
+    <footer class="site-foot">
+      <p>Numberphile tells the story in <a href="https://www.youtube.com/watch?v=bN8PE3eljdA">What's special about 196?</a>, with James Grime.</p>
+      <p><a href="../">Number Lab</a> is made by <a href="https://zeikar.dev/">zeikar</a>. <a href="https://github.com/zeikar/number-lab">Source on GitHub</a>.</p>
+    </footer>
+  </div>
+</body>
+</html>

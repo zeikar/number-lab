@@ -1,28 +1,5 @@
 /* 6174: the Kaprekar machine, its paper tape, and the map of all 10,000 numbers. */
 
-.toy {
-  display: grid;
-  gap: 40px;
-}
-
-@media (min-width: 980px) {
-  .toy {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
-    align-items: start;
-    gap: 48px;
-  }
-}
-
-.intro {
-  margin-bottom: 24px;
-}
-
-.lede {
-  max-width: 52ch;
-  margin-top: 12px;
-  font-size: 1.125rem;
-}
-
 /* The machine */
 
 .machine {
@@ -30,12 +7,6 @@
   --tile-h: 84px;
   --gap: 10px;
   --sort-ms: 520ms;
-  padding: 24px 20px 28px;
-  border-radius: 22px;
-  background: var(--enamel-deep);
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, #fff 35%, transparent),
-    0 3px 0 color-mix(in srgb, var(--ink) 14%, transparent);
 }
 
 @media (max-width: 420px) {
@@ -43,55 +14,12 @@
     --tile-w: 54px;
     --tile-h: 70px;
     --gap: 8px;
-    padding-inline: 14px;
   }
 
   .row--minus::before {
     width: 14px;
     margin-right: 8px;
   }
-}
-
-.entry label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 650;
-}
-
-.entry-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.entry input {
-  flex: 1 1 7.5ch;
-  min-width: 0;
-  max-width: 10ch;
-  min-height: 48px;
-  padding: 0 14px;
-  border: 0;
-  border-radius: 12px;
-  background: var(--paper);
-  color: var(--ink);
-  font: 700 1.6rem/1 var(--print);
-  letter-spacing: 0.12em;
-  box-shadow: inset 0 2px 0 color-mix(in srgb, var(--ink) 18%, transparent);
-}
-
-.entry input::placeholder {
-  color: color-mix(in srgb, var(--ink) 35%, transparent);
-}
-
-.hint {
-  margin-top: 8px;
-  color: var(--ink-soft);
-  font-size: 0.92rem;
-}
-
-.hint.is-error {
-  color: var(--ink);
-  font-weight: 650;
 }
 
 .works {
@@ -129,18 +57,6 @@
   position: absolute;
   top: 0;
   left: 0;
-  display: grid;
-  place-items: center;
-  width: var(--tile-w);
-  height: var(--tile-h);
-  border-radius: 10px;
-  background: var(--key);
-  color: var(--on-key);
-  font-size: calc(var(--tile-h) * 0.66);
-  font-weight: 720;
-  font-variation-settings: 'wdth' 75;
-  line-height: 1;
-  box-shadow: inset 0 -5px 0 color-mix(in srgb, #000 30%, transparent);
   transform: translateX(calc(var(--slot) * (var(--tile-w) + var(--gap))));
   transition: transform var(--sort-ms) cubic-bezier(0.65, 0, 0.35, 1);
 }
@@ -151,72 +67,11 @@
   box-shadow: inset 0 0 0 2px var(--ink), inset 0 -5px 0 color-mix(in srgb, var(--ink) 22%, transparent);
 }
 
-.tile.is-kaprekar {
-  background: var(--red);
-  color: #fff;
-}
-
-@media (prefers-color-scheme: dark) {
-  .tile.is-kaprekar {
-    color: var(--on-key);
-  }
-}
-
 .works.is-still .tile {
   transition: none;
 }
 
-.verdict {
-  min-height: 3.1em;
-  text-align: center;
-  font-weight: 600;
-  text-wrap: balance;
-}
-
-/* The paper tape that prints one line per round. */
-
-.tape-slot {
-  margin-top: 18px;
-  padding-top: 10px;
-  border-top: 6px solid var(--key);
-  border-radius: 3px 3px 0 0;
-}
-
-.tape-slot[hidden] {
-  display: none;
-}
-
-.tape {
-  width: min(100%, 26ch);
-  margin: 0 auto;
-  padding: 10px 16px 22px;
-  list-style: none;
-  background: var(--paper);
-  font: 400 1.05rem/1.7 var(--print);
-  text-align: right;
-  /* Torn bottom edge. */
-  --tear: 8px;
-  mask:
-    linear-gradient(#000 0 0) top / 100% calc(100% - var(--tear)) no-repeat,
-    conic-gradient(from -45deg at 50% 100%, #000 90deg, #0000 0) bottom / calc(var(--tear) * 2) var(--tear) repeat-x;
-}
-
-.tape li {
-  white-space: pre;
-}
-
-.tape .is-kaprekar {
-  color: var(--red);
-  font-weight: 700;
-}
-
 /* The map of all 10,000 numbers */
-
-.atlas-lede {
-  max-width: 56ch;
-  margin: 10px 0 18px;
-  color: var(--ink-soft);
-}
 
 .map-frame {
   position: relative;
@@ -303,44 +158,9 @@
 
 /* Histogram: columns double as the map's legend. */
 
-.histogram {
-  max-width: 560px;
-  margin: 28px 0 0;
-}
-
-.histogram figcaption {
-  font-weight: 650;
-}
-
-.bars {
-  display: grid;
+.bars,
+.bars-axis {
   grid-template-columns: repeat(8, 1fr);
-  align-items: end;
-  height: 168px;
-  margin: 12px 0 0;
-  padding: 0;
-  list-style: none;
-  border-bottom: 1px solid var(--rule);
-}
-
-.bars li {
-  height: 100%;
-}
-
-.bars button {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  border: 0;
-  border-radius: 6px 6px 0 0;
-  background: none;
-  color: var(--ink);
-  font: inherit;
-  cursor: default;
 }
 
 .bars .value {
@@ -348,25 +168,6 @@
   font-size: 0.85rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-}
-
-.bars .bar {
-  width: min(24px, 60%);
-  height: calc(var(--h) * 0.8%);
-  min-height: 2px;
-  border-radius: 4px 4px 0 0;
-  background: var(--c);
-}
-
-.bars-axis {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  margin: 6px 0 0;
-  padding: 0;
-  list-style: none;
-  color: var(--ink-soft);
-  font-size: 0.9rem;
-  text-align: center;
 }
 
 .rep-note {
@@ -388,15 +189,6 @@
 
 /* Notes */
 
-.notes {
-  max-width: 64ch;
-  margin-top: 56px;
-}
-
-.notes p {
-  margin-top: 12px;
-}
-
 .formula {
   overflow-x: auto;
   padding: 8px 0;
@@ -417,11 +209,6 @@
 .formula var {
   font-style: normal;
   font-weight: 700;
-}
-
-.noscript {
-  margin: 0 0 24px;
-  font-weight: 650;
 }
 
 @media (prefers-reduced-motion: reduce) {

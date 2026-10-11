@@ -14,6 +14,14 @@ Type a number, or tap one on the map, and the machine sorts the digit keys, subt
 
 Based on Numberphile's [6174](https://www.youtube.com/watch?v=d8TRcZklX_Q).
 
+### [196, reverse and add](https://zeikar.dev/number-lab/196/)
+
+Write a number backwards and add it to the original, and repeat until the answer reads the same both ways. Most numbers below 10,000 get there in a step or two, but 89 takes 24. Nobody has ever got 196 there, though computers have taken it to a billion digits.
+
+Type a number and the machine slides a copy of its digits into reverse order, adds column by column with the carries showing, and prints each sum on a paper tape. **Run 196** keeps going live in your browser, one line per step: digits that match their mirror print in full ink, so a palindrome would come out as a solid line, and the printout keeps widening into a triangle. A histogram of every number below 10,000 shows how rare that is: 246 of them have no palindrome after 1,000 steps. Links like `196/#n=89` run that number.
+
+Based on Numberphile's [What's special about 196?](https://www.youtube.com/watch?v=bN8PE3eljdA)
+
 ## Run locally
 
 No build step. Serve the folder with any static server:
@@ -30,7 +38,7 @@ Then open http://localhost:8000.
 npm test   # the arithmetic behind each experiment (Node's built-in test runner)
 ```
 
-Each experiment lives in its own folder with its page, scripts and stylesheet; [`style.css`](style.css) at the root holds the shared colours, type and controls. Add a new experiment's page to [`index.html`](index.html) and [`sitemap.xml`](sitemap.xml).
+Each experiment lives in its own folder with its page, scripts and stylesheet; [`style.css`](style.css) at the root holds the shared colours, type, controls and machine parts. Add a new experiment's page to [`index.html`](index.html) and [`sitemap.xml`](sitemap.xml).
 
 ## Deploy
 

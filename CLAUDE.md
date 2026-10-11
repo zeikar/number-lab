@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Number Lab: small browser toys for famous number facts, most of them from Numberphile videos. Static files, no build step, plain ES modules. GitHub Pages deploys `main` / root to https://zeikar.dev/number-lab/, so every URL in the pages is relative. The first experiment is [6174/](6174/) (Kaprekar's constant).
+Number Lab: small browser toys for famous number facts, most of them from Numberphile videos. Static files, no build step, plain ES modules. GitHub Pages deploys `main` / root to https://zeikar.dev/number-lab/, so every URL in the pages is relative. The experiments so far are [6174/](6174/) (Kaprekar's constant) and [196/](196/) (reverse and add).
 
 ## Commands
 
@@ -14,11 +14,11 @@ Number Lab: small browser toys for famous number facts, most of them from Number
 ## Layout
 
 - [index.html](index.html) — the lab home, one card per experiment
-- [style.css](style.css) — shared tokens, type, page shell and the `.key` buttons
+- [style.css](style.css) — shared tokens, type, page shell, `.key` buttons, and the machine parts experiments share: page layout, machine panel and entry form, digit tiles, paper tape, histogram, notes
 - `<experiment>/` — its own `index.html`, `style.css`, a pure logic module, UI scripts and `og.png`
 - [test/](test/) — tests for each experiment's logic module
 
-A component lives in its experiment's stylesheet until a second experiment needs it; then move it to the root `style.css` instead of copying it. The machine panel, digit tiles and paper tape in [6174/style.css](6174/style.css) are the first candidates.
+A component lives in its experiment's stylesheet until a second experiment needs it; then move it to the root `style.css` instead of copying it. The shared parts carry the look; each experiment sizes and positions them itself (6174's tiles sit in four fixed slots, 196's shrink as the number grows).
 
 ## Adding an experiment
 

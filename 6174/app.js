@@ -45,7 +45,7 @@ function setRow(row, n, { hidden = false } = {}) {
     tile.textContent = digit;
     tile.style.setProperty('--slot', i);
     tile.style.opacity = hidden ? 0 : 1;
-    tile.classList.toggle('is-kaprekar', row === rows.next && n === KAPREKAR);
+    tile.classList.toggle('is-answer', row === rows.next && n === KAPREKAR);
   });
   works.offsetWidth; // apply the jump before transitions come back
   works.classList.remove('is-still');
@@ -95,7 +95,7 @@ function printTape({ big, small, next: n }) {
   const line = document.createElement('li');
   const result = document.createElement('span');
   result.textContent = pad(n);
-  if (n === KAPREKAR) result.className = 'is-kaprekar';
+  if (n === KAPREKAR) result.className = 'is-answer';
   line.append(`${pad(big)} − ${pad(small)} = `, result);
   tape.append(line);
 }
