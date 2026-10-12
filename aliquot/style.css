@@ -1,0 +1,111 @@
+/* Aliquot sequences: the path and its tape, and the grid of the first thousand starts. */
+
+/* The machine */
+
+.path {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 8px;
+  background: var(--paper);
+  touch-action: manipulation;
+}
+
+.machine .pointer-readout {
+  min-height: 2.6em;
+  margin-top: 8px;
+  font-size: 0.95rem;
+  overflow-wrap: anywhere;
+}
+
+.machine .entry {
+  margin-top: 14px;
+}
+
+.follow-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 4px 12px;
+  margin-top: 20px;
+}
+
+.follow-head .verdict {
+  grid-column: 1;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.follow-status {
+  grid-column: 1;
+  min-height: 1.5em;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.follow-head .key {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+/* The tape: every step with its prime factors, newest at the bottom. */
+.steps {
+  max-height: 18rem;
+  margin: 16px 0 0;
+  padding: 10px 14px 22px;
+  overflow-y: auto;
+  list-style: none;
+  background: var(--paper);
+  font: 400 0.95rem/1.4 var(--print);
+}
+
+.steps:empty {
+  display: none;
+}
+
+.steps li {
+  display: grid;
+  grid-template-columns: 4ch 1fr;
+  column-gap: 1.5ch;
+  padding: 3px 0;
+}
+
+.steps .tape-step {
+  grid-row: 1 / span 2;
+  color: var(--ink-soft);
+  text-align: right;
+}
+
+.steps .term {
+  overflow-wrap: break-word;
+}
+
+.steps .factors {
+  grid-column: 2;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+  overflow-wrap: break-word;
+}
+
+/* The grid of the first thousand */
+
+.grid {
+  display: block;
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 40 / 25;
+  border-radius: 6px;
+  background: var(--paper);
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+.swatch--stripe {
+  background: linear-gradient(135deg, transparent 42%, var(--ink-soft) 42% 58%, transparent 58%);
+  box-shadow: inset 0 0 0 1px var(--rule);
+}
+
+.swatch--ring {
+  box-shadow: inset 0 0 0 2px var(--red);
+}

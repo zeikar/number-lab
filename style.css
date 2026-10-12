@@ -500,6 +500,17 @@ p {
   gap: 8px;
 }
 
+/* A count a run fills in after a legend entry. */
+.legend .count {
+  color: var(--ink);
+  font-family: var(--print);
+}
+
+.legend .count:not(:empty)::before {
+  content: '· ';
+  color: var(--ink-soft);
+}
+
 /* A colour key's square */
 
 .swatch {

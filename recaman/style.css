@@ -53,13 +53,3 @@
   touch-action: manipulation;
   cursor: crosshair;
 }
-
-.legend .count {
-  color: var(--ink);
-  font-family: var(--print);
-}
-
-.legend .count:not(:empty)::before {
-  content: '· ';
-  color: var(--ink-soft);
-}

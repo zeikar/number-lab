@@ -54,6 +54,14 @@ Type a number and the machine lays its divisors end to end, biggest first, under
 
 Based on Numberphile's [Perfect Numbers and Mersenne Primes](https://www.youtube.com/watch?v=T0xKHwQH-4I).
 
+### [Aliquot sequences](https://zeikar.dev/number-lab/aliquot/)
+
+Add up a number's divisors, leaving out the number itself, to get the next number, and repeat. Most numbers fall to 0 through a prime and 1; some land on a perfect number or fall into a loop like 220 and 284. 276 keeps climbing, and nobody knows if it ever comes down.
+
+Type a start and the machine follows it in a web worker, factoring each term with Pollard's rho. It plots the path on a log scale and prints every step on a tape with its prime factors: 138 climbs to 179,931,895,322 before it falls to 0 after 178 steps, and 276 climbs past 40 digits, then slows to a crawl as each step gets harder to factor, until you stop it. **Follow all 1,000** walks every start from 1 to 1,000 together, up to 25 digits: 965 reach 0 and 22 fall into a loop. Of the 13 that pass 25 digits, 840 comes back down later, but nobody knows where the other 12 end. Those 12 are the Lehmer five and seven that run into them. Links like `aliquot/#n=276` follow that start.
+
+Based on Numberphile's [An amazing thing about 276](https://www.youtube.com/watch?v=OtYKDzXwDEE) and [Untouchable Numbers](https://www.youtube.com/watch?v=Yh1QUYn2f3I).
+
 ## Run locally
 
 No build step. Serve the folder with any static server:

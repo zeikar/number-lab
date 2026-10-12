@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aliquot sequences | Number Lab</title>
+  <meta name="description" content="Add up a number's divisors, then do it again. Most numbers fall to 0, a few loop forever, and 276 climbs past 200 digits without anyone knowing where it ends. Follow any start in your browser.">
+  <link rel="canonical" href="https://zeikar.dev/number-lab/aliquot/">
+  <link rel="icon" href="../favicon.svg">
+  <meta name="theme-color" content="#d5dbd3" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1b201e" media="(prefers-color-scheme: dark)">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zeikar.dev/number-lab/aliquot/">
+  <meta property="og:title" content="Aliquot sequences">
+  <meta property="og:description" content="Add up the divisors, then do it again. Where does 276 end? Nobody knows.">
+  <meta property="og:image" content="https://zeikar.dev/number-lab/aliquot/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The aliquot sequence of 138 drawn as a mountain that climbs to twelve digits and falls back to 0, beside a grid of the starts 1 to 1,000 with twelve squares ringed in red.">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Courier+Prime:wght@400;700&display=swap">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <div class="page">
+    <nav class="lab-bar" aria-label="Site">
+      <a href="../">Number Lab</a>
+      <a href="https://zeikar.dev/">zeikar.dev</a>
+    </nav>
+
+    <noscript><p class="noscript">The machine and the grid need JavaScript to run.</p></noscript>
+
+    <main class="toy">
+      <div class="bench">
+        <header class="intro">
+          <h1>Aliquot sequences</h1>
+          <p class="lede">Add up a number's divisors, leaving out the number itself, and you get the next number. Then do it again. 12 goes to 1 + 2 + 3 + 4 + 6 = 16, then 15, 9, 4, 3, 1 and 0. Most numbers fall to 0 like that, and a few loop forever. 276 climbs and climbs, and nobody knows if it ever comes down.</p>
+        </header>
+
+        <section class="machine" aria-labelledby="machine-title">
+          <h2 id="machine-title" class="visually-hidden">Follow a number</h2>
+          <canvas class="path" id="path" role="img" aria-label="Each step of the sequence plotted on a log scale, from the start to where it ends. The steps are listed on the tape below."></canvas>
+          <p class="pointer-readout" id="path-readout">Point at the line to read off a step.</p>
+
+          <form class="entry entry--wide" id="entry" novalidate>
+            <label for="number">Start at…</label>
+            <div class="entry-row">
+              <input id="number" name="number" type="text" inputmode="numeric" autocomplete="off" maxlength="19" placeholder="276" aria-describedby="hint">
+              <button type="submit" class="key">Follow</button>
+            </div>
+            <p class="hint" id="hint" aria-live="polite">Any whole number up to 15 digits. Each step means factoring a number: past 30 digits or so a step can take seconds, then minutes, then far longer.</p>
+          </form>
+
+          <div class="presets" role="group" aria-label="Try a start">
+            <button type="button" class="key key--plain" data-n="12">12</button>
+            <button type="button" class="key key--plain" data-n="95">95</button>
+            <button type="button" class="key key--plain" data-n="138">138</button>
+            <button type="button" class="key key--plain" data-n="220">220</button>
+            <button type="button" class="key key--plain" data-n="12496">12496</button>
+            <button type="button" class="key key--plain" data-n="276">276</button>
+          </div>
+
+          <div class="follow-head">
+            <p class="verdict" id="verdict" aria-live="polite">Pick a start and the machine follows it.</p>
+            <p class="follow-status" id="follow-status"></p>
+            <button type="button" class="key key--plain" id="stop" hidden>Stop</button>
+          </div>
+
+          <ol class="steps torn" id="tape" tabindex="0" aria-label="The steps, each with its prime factors"></ol>
+        </section>
+      </div>
+
+      <section class="first" aria-labelledby="first-title">
+        <h2 id="first-title">The first thousand</h2>
+        <p class="section-lede">Every start from 1 to 1,000, followed until it reaches 0, falls into a loop, or passes 25 digits. Point at a square to see where it goes, and tap it to follow it in the machine.</p>
+
+        <div class="run-head">
+          <button type="button" class="key" id="walk">Follow all 1,000</button>
+          <p class="run-status" id="walk-status">They all walk together, faster and faster. Watch which squares stay empty.</p>
+          <p class="visually-hidden" id="walk-announce" aria-live="polite"></p>
+        </div>
+
+        <canvas class="grid" id="grid" role="img" aria-label="A 40 by 25 grid of the starts 1 to 1,000. After the walk, 965 have reached 0 and 22 a loop. 13 pass 25 digits: 840 comes back down later, and nobody knows where the other 12 end."></canvas>
+
+        <ul class="legend" aria-label="Where each start goes">
+          <li><span class="swatch" style="background: var(--r1)"></span>0 within 5 steps <span class="count" data-count="0"></span></li>
+          <li><span class="swatch" style="background: var(--r2)"></span>Within 10 <span class="count" data-count="1"></span></li>
+          <li><span class="swatch" style="background: var(--r3)"></span>Within 20 <span class="count" data-count="2"></span></li>
+          <li><span class="swatch" style="background: var(--r4)"></span>Within 50 <span class="count" data-count="3"></span></li>
+          <li><span class="swatch" style="background: var(--r5)"></span>Within 100 <span class="count" data-count="4"></span></li>
+          <li><span class="swatch" style="background: var(--r6)"></span>More than 100 <span class="count" data-count="5"></span></li>
+          <li><span class="swatch" style="background: var(--ink)"></span>A loop <span class="count" data-count="loop"></span></li>
+          <li><span class="swatch swatch--stripe"></span>Too high to follow here <span class="count" data-count="high"></span></li>
+          <li><span class="swatch swatch--ring"></span>Nobody knows <span class="count" data-count="open"></span></li>
+        </ul>
+        <p class="pointer-readout" id="grid-readout">276 is the first start nobody has followed to the end.</p>
+      </section>
+    </main>
+
+    <section class="notes" aria-labelledby="notes-title">
+      <h2 id="notes-title">Where they go</h2>
+      <p>Most sequences hit a prime, whose only divisor below itself is 1, and 1 goes to 0. Some land on a perfect number like 6 and stay there. Some fall into a pair: the divisors of 220 add up to 284, and those of 284 add up to 220. Amicable pairs like that were known to the Pythagoreans, yet the second smallest, 1,184 and 1,210, was overlooked until a 16-year-old, Nicolò Paganini (not the violinist), found it in 1867. In 1918 Paul Poulet found longer loops: 12,496 comes back to itself after 5 steps, and 14,316 after 28.</p>
+      <p>Below 1,000, every start ends one of those ways except twelve: the Lehmer five, 276, 552, 564, 660 and 966, and seven more that run into them: 306, 396 and 696 into 276, 780 into 564, 828 and 996 into 660, and 888 into 552. By October 2026, computers had followed 276 for 2,162 steps, to a 215-digit number. The next step needs a 210-digit number factored, and nobody has managed it yet. 840 climbs past 25 digits too, but it comes back down: it reaches 0 after 749 steps.</p>
+      <p>And nothing leads to 276: no number's divisors add up to it, which makes it one of the untouchable numbers, like 2, 5, 52, 88 and 96.</p>
+      <p>The Catalan–Dickson conjecture says every aliquot sequence ends or loops. Richard Guy and John Selfridge doubted it, and thought some climb forever. Nobody has proved it either way.</p>
+    </section>
+
+    <footer class="site-foot">
+      <p>Numberphile tells the story in <a href="https://www.youtube.com/watch?v=OtYKDzXwDEE">An amazing thing about 276</a>, with Ben Sparks, and follows it up in <a href="https://www.youtube.com/watch?v=Yh1QUYn2f3I">Untouchable Numbers</a>.</p>
+      <p><a href="../">Number Lab</a> is made by <a href="https://zeikar.dev/">zeikar</a>. <a href="https://github.com/zeikar/number-lab">Source on GitHub</a>.</p>
+    </footer>
+  </div>
+</body>
+</html>

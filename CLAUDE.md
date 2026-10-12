@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Number Lab: small browser toys for famous number facts, most of them from Numberphile videos. Static files, no build step, plain ES modules. GitHub Pages deploys `main` / root to https://zeikar.dev/number-lab/, so every URL in the pages is relative. The experiments so far are [6174/](6174/) (Kaprekar's constant), [196/](196/) (reverse and add), [goldbach/](goldbach/) (Goldbach's conjecture), [sunflower/](sunflower/) (the golden angle), [recaman/](recaman/) (Recamán's sequence) and [perfect/](perfect/) (perfect numbers and Mersenne primes).
+Number Lab: small browser toys for famous number facts, most of them from Numberphile videos. Static files, no build step, plain ES modules. GitHub Pages deploys `main` / root to https://zeikar.dev/number-lab/, so every URL in the pages is relative. The experiments so far are [6174/](6174/) (Kaprekar's constant), [196/](196/) (reverse and add), [goldbach/](goldbach/) (Goldbach's conjecture), [sunflower/](sunflower/) (the golden angle), [recaman/](recaman/) (Recamán's sequence), [perfect/](perfect/) (perfect numbers and Mersenne primes) and [aliquot/](aliquot/) (aliquot sequences and 276).
 
 ## Commands
 
