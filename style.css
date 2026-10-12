@@ -295,6 +295,20 @@ p {
   accent-color: var(--key);
 }
 
+/* A row of small keys that fill in the entry with a ready-made example. */
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.presets .key {
+  min-height: 40px;
+  padding: 0 14px;
+  font-size: 1.05rem;
+}
+
 .hint {
   margin-top: 8px;
   color: var(--ink-soft);

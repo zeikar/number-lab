@@ -1,0 +1,229 @@
+/* Perfect numbers: the scale of divisors, and the Mersenne prime hunt. */
+
+/* The scale. --n is n's share of the width; the divisors may run past it. */
+
+.scale {
+  --pad: 14px;
+  --n: 1;
+  /* The blocks are sized in percentages, so their labels mustn't widen the page on a phone. */
+  contain: inline-size;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  padding: 18px var(--pad);
+  border-radius: 8px;
+  background: var(--paper);
+}
+
+.scale-n,
+.part {
+  display: grid;
+  align-items: center;
+  height: 48px;
+  overflow: hidden;
+  white-space: nowrap;
+  font-weight: 720;
+  font-variation-settings: 'wdth' 75;
+  line-height: 1;
+}
+
+.scale-n {
+  width: calc(var(--n) * 100%);
+  padding: 0 12px;
+  border-radius: 10px;
+  background: var(--key);
+  color: var(--on-key);
+  font-size: 1.6rem;
+  box-shadow: inset 0 -4px 0 color-mix(in srgb, #000 30%, transparent);
+}
+
+.scale.is-perfect .scale-n {
+  background: var(--red);
+  color: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  .scale.is-perfect .scale-n {
+    color: var(--on-key);
+  }
+}
+
+.scale-parts {
+  display: flex;
+}
+
+.part {
+  flex: none;
+  justify-items: center;
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 1.2rem;
+  box-shadow: inset 0 0 0 1.5px var(--ink);
+}
+
+/* The divisors too thin to draw one by one, packed into a striped block. */
+.part--rest {
+  background: repeating-linear-gradient(90deg, var(--ink) 0 1px, transparent 1px 4px);
+}
+
+/* Its label sits on its own patch of paper. */
+.part--rest span {
+  padding: 4px 6px;
+  border-radius: 4px;
+  background: var(--paper);
+  font-size: 1rem;
+}
+
+.scale-n.is-tight {
+  color: transparent;
+}
+
+.part.is-tight span {
+  visibility: hidden;
+}
+
+/* Where n ends, across both rows. */
+.scale-line {
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: calc(var(--pad) + var(--n) * (100% - 2 * var(--pad)));
+  border-left: 2px dashed var(--ink-soft);
+  transform: translateX(-1px);
+}
+
+.scale.is-perfect .scale-line {
+  border-left: 2px solid var(--red);
+}
+
+.sum {
+  margin-top: 12px;
+  font: 400 1rem/1.5 var(--print);
+  text-align: center;
+  text-wrap: balance;
+}
+
+.machine .entry {
+  margin-top: 22px;
+}
+
+/* Room for all twelve digits. */
+#number {
+  max-width: calc(13ch + 28px);
+}
+
+.machine .verdict {
+  margin-top: 20px;
+}
+
+.binary {
+  font-family: var(--print);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+/* The hunt */
+
+.newest {
+  max-width: 560px;
+  margin: 0 0 22px;
+}
+
+.newest figcaption {
+  margin-bottom: 8px;
+  font-weight: 650;
+}
+
+.digits {
+  height: 12rem;
+  padding: 10px 12px 18px;
+  overflow: hidden;
+  background: var(--paper);
+  font-family: var(--print);
+  line-height: 1.25;
+  word-break: break-all;
+}
+
+.finds {
+  width: 100%;
+  max-width: 560px;
+  border-collapse: collapse;
+  font: 400 0.95rem/1.3 var(--print);
+  font-variant-numeric: tabular-nums;
+}
+
+.finds th {
+  padding: 0 6px 6px;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink-soft);
+  font: 650 0.85rem/1.2 var(--font);
+  text-align: right;
+}
+
+.finds td {
+  padding: 3px 6px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.finds th:first-child,
+.finds td:first-child {
+  padding-left: 0;
+  color: var(--ink-soft);
+}
+
+.finds th:last-child,
+.finds td:last-child {
+  padding-right: 0;
+}
+
+.finds caption {
+  padding-bottom: 10px;
+  color: var(--ink-soft);
+  font: 400 0.95rem/1.45 var(--font);
+  text-align: left;
+}
+
+.finds .detail td {
+  padding: 4px 0 12px;
+  white-space: normal;
+  font: 600 0.95rem/1.45 var(--font);
+  text-align: left;
+}
+
+.find {
+  min-width: 24px;
+  min-height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline dotted 1px;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.find[aria-expanded='true'] {
+  font-weight: 700;
+  text-decoration-style: solid;
+}
+
+.record {
+  max-width: 560px;
+  margin-top: 14px;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 420px) {
+  .finds {
+    font-size: 0.85rem;
+  }
+
+  .finds th,
+  .finds td {
+    padding-inline: 4px;
+  }
+}

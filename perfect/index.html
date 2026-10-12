@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Perfect numbers | Number Lab</title>
+  <meta name="description" content="Lay a number's divisors end to end and see if they reach it exactly. Then hunt Mersenne primes live in your browser, each one a new perfect number.">
+  <link rel="canonical" href="https://zeikar.dev/number-lab/perfect/">
+  <link rel="icon" href="../favicon.svg">
+  <meta name="theme-color" content="#d5dbd3" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1b201e" media="(prefers-color-scheme: dark)">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zeikar.dev/number-lab/perfect/">
+  <meta property="og:title" content="Perfect numbers">
+  <meta property="og:description" content="6 = 1 + 2 + 3. Only 52 perfect numbers are known. Hunt for them in your browser.">
+  <meta property="og:image" content="https://zeikar.dev/number-lab/perfect/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The divisors of 28 laid end to end under a bar 28 long, reaching exactly to its end, beside a list of Mersenne primes found by the browser and a perfect number printed in full.">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Courier+Prime:wght@400;700&display=swap">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <div class="page">
+    <nav class="lab-bar" aria-label="Site">
+      <a href="../">Number Lab</a>
+      <a href="https://zeikar.dev/">zeikar.dev</a>
+    </nav>
+
+    <noscript><p class="noscript">The scale and the hunt need JavaScript to run.</p></noscript>
+
+    <main class="toy">
+      <div class="bench">
+        <header class="intro">
+          <h1>Perfect numbers</h1>
+          <p class="lede">A number is perfect when its divisors, leaving out the number itself, add up to exactly that number: 6 = 1 + 2 + 3, and 28 = 1 + 2 + 4 + 7 + 14. Only 52 are known, and each one comes from a prime of the form 2<sup>p</sup> − 1. Are there infinitely many? Is there an odd one? Nobody knows.</p>
+        </header>
+
+        <section class="machine" aria-labelledby="machine-title">
+          <h2 id="machine-title" class="visually-hidden">Add up the divisors</h2>
+          <div class="scale" id="scale" role="img" aria-label="A bar 28 long, with its divisors, 14, 7, 4, 2 and 1, laid end to end beneath it. They reach exactly to the end.">
+            <div class="scale-n">28</div>
+            <div class="scale-parts"></div>
+            <span class="scale-line"></span>
+          </div>
+          <p class="sum" id="sum">14 + 7 + 4 + 2 + 1 = 28</p>
+
+          <form class="entry entry--wide" id="entry" novalidate>
+            <label for="number">Add up the divisors of…</label>
+            <div class="entry-row">
+              <input id="number" name="number" type="text" inputmode="numeric" autocomplete="off" maxlength="15" placeholder="28" aria-describedby="hint">
+              <button type="submit" class="key">Add</button>
+            </div>
+            <p class="hint" id="hint" aria-live="polite">Any whole number up to 999,999,999,999. Seven of them are perfect.</p>
+          </form>
+
+          <div class="presets" role="group" aria-label="Try a number">
+            <button type="button" class="key key--plain" data-n="6">6</button>
+            <button type="button" class="key key--plain" data-n="28">28</button>
+            <button type="button" class="key key--plain" data-n="496">496</button>
+            <button type="button" class="key key--plain" data-n="8128">8128</button>
+            <button type="button" class="key key--plain" data-n="12">12</button>
+            <button type="button" class="key key--plain" data-n="945">945</button>
+            <button type="button" class="key key--plain" data-n="1024">1024</button>
+          </div>
+
+          <p class="verdict" id="verdict" aria-live="polite">28 is perfect: its divisors add up to exactly 28.</p>
+        </section>
+      </div>
+
+      <section class="hunt" aria-labelledby="hunt-title">
+        <h2 id="hunt-title">The Mersenne prime hunt</h2>
+        <p class="section-lede">Each prime of the form 2<sup>p</sup> − 1, a Mersenne prime, makes a perfect number: 2<sup>p − 1</sup> × (2<sup>p</sup> − 1). Your browser tries every prime p in turn. 2<sup>2</sup> − 1 = 3 is plainly prime; for odd p it runs the Lucas–Lehmer test: start at 4, then square and subtract 2, p − 2 times, keeping only the remainder after dividing by 2<sup>p</sup> − 1. It ends at 0 exactly when 2<sup>p</sup> − 1 is prime.</p>
+
+        <div class="run-head">
+          <button type="button" class="key" id="hunt">Hunt</button>
+          <p class="run-status" id="hunt-status">It starts at p = 2 and keeps going until you stop it. The first ones come fast.</p>
+          <p class="visually-hidden" id="hunt-announce" aria-live="polite"></p>
+        </div>
+
+        <figure class="newest" id="newest" hidden>
+          <figcaption></figcaption>
+          <p class="digits torn" aria-hidden="true"></p>
+        </figure>
+
+        <table class="finds" id="finds" hidden>
+          <caption>The Mersenne primes 2<sup>p</sup> − 1 found so far. Press a p to see who found it first.</caption>
+          <thead>
+            <tr><th scope="col">#</th><th scope="col">p</th><th scope="col">Digits</th><th scope="col">Found after</th><th scope="col">First found</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+
+        <p class="record">The record, the 52nd known, is 2<sup><span class="visually-hidden">to the power </span>136,279,841</sup> − 1, with 41,024,320 digits.</p>
+      </section>
+    </main>
+
+    <section class="notes" aria-labelledby="notes-title">
+      <h2 id="notes-title">Two thousand years of hunting</h2>
+      <p>Around 300 BCE, Euclid showed that whenever 2<sup>p</sup> − 1 is prime, 2<sup>p − 1</sup> × (2<sup>p</sup> − 1) is perfect. So 2 × 3 = 6, 4 × 7 = 28 and 16 × 31 = 496. About 2,000 years later, Euler proved that every even perfect number is made this way. Written in binary, that's p ones and then p − 1 zeros: 28 is 11100.</p>
+      <p>The primes are named after Marin Mersenne, who in 1644 listed the exponents up to 257 he believed worked. He included two that don't, 67 and 257, and left out three that do: 61, 89 and 107. Only a prime p can work, and not every prime does: 2<sup>11</sup> − 1 = 2,047 = 23 × 89.</p>
+      <p>Édouard Lucas proved 2<sup>127</sup> − 1 prime in 1876, and it stayed the largest known prime for 75 years. Derrick Lehmer proved Lucas's method in full in 1930, and it's the test your browser runs. In January 1952 it ran on the SWAC computer at UCLA and found 2<sup>521</sup> − 1, the first Mersenne prime found by an electronic computer, then 2<sup>607</sup> − 1 less than two hours later.</p>
+      <p>Every one found since late 1996 has come from GIMPS, the Great Internet Mersenne Prime Search, run on volunteers' computers. The record, 2<sup>136,279,841</sup> − 1, has 41,024,320 digits: Luke Durant found it in October 2024 with thousands of cloud GPUs, and a Lucas–Lehmer test confirmed it. Not every exponent below it has been checked yet, so there could be another hiding beneath it.</p>
+      <p>Nobody knows whether there are infinitely many Mersenne primes, so nobody knows whether there are infinitely many perfect numbers. Nobody has found an odd perfect number either, or proved there isn't one. If there is, it's bigger than 10<sup>1500</sup> (Ochem and Rao, 2012).</p>
+    </section>
+
+    <footer class="site-foot">
+      <p>Numberphile tells the story in <a href="https://www.youtube.com/watch?v=T0xKHwQH-4I">Perfect Numbers and Mersenne Primes</a>, with Matt Parker.</p>
+      <p><a href="../">Number Lab</a> is made by <a href="https://zeikar.dev/">zeikar</a>. <a href="https://github.com/zeikar/number-lab">Source on GitHub</a>.</p>
+    </footer>
+  </div>
+</body>
+</html>

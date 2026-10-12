@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Number Lab: small browser toys for famous number facts, most of them from Numberphile videos. Static files, no build step, plain ES modules. GitHub Pages deploys `main` / root to https://zeikar.dev/number-lab/, so every URL in the pages is relative. The experiments so far are [6174/](6174/) (Kaprekar's constant), [196/](196/) (reverse and add), [goldbach/](goldbach/) (Goldbach's conjecture), [sunflower/](sunflower/) (the golden angle) and [recaman/](recaman/) (Recamán's sequence).
+Number Lab: small browser toys for famous number facts, most of them from Numberphile videos. Static files, no build step, plain ES modules. GitHub Pages deploys `main` / root to https://zeikar.dev/number-lab/, so every URL in the pages is relative. The experiments so far are [6174/](6174/) (Kaprekar's constant), [196/](196/) (reverse and add), [goldbach/](goldbach/) (Goldbach's conjecture), [sunflower/](sunflower/) (the golden angle), [recaman/](recaman/) (Recamán's sequence) and [perfect/](perfect/) (perfect numbers and Mersenne primes).
 
 ## Commands
 
@@ -14,7 +14,7 @@ Number Lab: small browser toys for famous number facts, most of them from Number
 ## Layout
 
 - [index.html](index.html) — the lab home, one card per experiment
-- [style.css](style.css) — shared tokens, type, page shell, `.key` buttons, and the machine parts experiments share: page layout, machine panel and entry form, digit tiles, paper tape, histogram, colour swatch, notes
+- [style.css](style.css) — shared tokens, type, page shell, `.key` buttons, and the machine parts experiments share: page layout, machine panel, entry form and preset keys, digit tiles, paper tape, histogram, colour swatch, notes
 - `<experiment>/` — its own `index.html`, `style.css`, a pure logic module, UI scripts and `og.png`
 - [test/](test/) — tests for each experiment's logic module
 

@@ -46,6 +46,14 @@ The machine draws each jump as a half circle, above and below the line in turn, 
 
 Based on Numberphile's [The Slightly Spooky Recamán Sequence](https://www.youtube.com/watch?v=FGC5TdIiT9U).
 
+### [Perfect numbers](https://zeikar.dev/number-lab/perfect/)
+
+A number is perfect when its divisors, leaving out the number itself, add up to exactly that number, like 6 = 1 + 2 + 3. Only 52 are known, each one made from a Mersenne prime 2^p − 1. Nobody knows if there are infinitely many, or if there's an odd one.
+
+Type a number and the machine lays its divisors end to end, biggest first, under a bar as long as the number: they fall short, reach exactly to the end, or run past it. Seven of the numbers up to 999,999,999,999 are perfect, and the verdict shows each one's binary form, p ones and then p − 1 zeros. **Hunt** tries 2^p − 1 for every prime p in turn, with the Lucas–Lehmer test for odd p, in a web worker, and lists each Mersenne prime it finds with how long your browser took and when it was first found, back to the ancient Greeks. The newest perfect number prints in full. The first 20 come fast; after that each one takes longer. Links like `perfect/#n=496` add up that number.
+
+Based on Numberphile's [Perfect Numbers and Mersenne Primes](https://www.youtube.com/watch?v=T0xKHwQH-4I).
+
 ## Run locally
 
 No build step. Serve the folder with any static server:
