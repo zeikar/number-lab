@@ -41,12 +41,24 @@ const chart = createChart({
   },
 });
 
-let follower = null;
+// The worker races ahead; the page shows its steps at a pace you can follow, slow at first
+// and quickening, then step by step as they land once the worker is the slower of the two.
+const FIRST_MS = 70;
+const LAST_MS = 10;
+const EASE_STEPS = 25; // how quickly the pace picks up
+const pause = step => LAST_MS + (FIRST_MS - LAST_MS) * Math.exp(-step / EASE_STEPS);
+
+let follower = null; // the worker, while it's still working
+let following = false; // a run is on screen, being shown or waited on
+let paced = true;
 let start = 0n;
-let terms = [];
+let terms = []; // the steps shown so far
 let factorsOf = [];
 let rows = [];
-let queue = [];
+let arrived = []; // steps the worker has sent that aren't shown yet
+let pending = new Map(); // factors for steps not shown yet
+let ending = null; // how it ends, once the worker knows
+let nextAt = 0; // when the next step is due on screen
 let lastAt = 0; // when the latest message came in
 let timer = 0;
 let frame = 0;
@@ -93,58 +105,82 @@ function row(step, term) {
   return li;
 }
 
-// Messages come faster than frames, so they queue up and land once a frame.
-function flush() {
-  frame = 0;
-  if (!queue.length) return;
-  const fresh = [];
-  const atBottom = tape.scrollHeight - tape.scrollTop - tape.clientHeight < 24;
-  const added = document.createDocumentFragment();
-  for (const data of queue) {
-    if (data.term !== undefined) {
-      terms.push(data.term);
-      fresh.push(data.term);
-      rows.push(row(data.step, data.term));
-      added.append(rows.at(-1));
-    }
-    if (data.factors) {
-      factorsOf[data.step] = data.factors;
-      rows[data.step].lastChild.innerHTML = `<span class="visually-hidden">= </span>${factorText(data.factors)}`;
-    }
-  }
-  queue = [];
-  tape.append(added);
-  if (atBottom) tape.scrollTop = tape.scrollHeight;
-  if (fresh.length) chart.add(fresh);
-  tick();
+function setFactors(step, factors) {
+  factorsOf[step] = factors;
+  rows[step].lastChild.innerHTML = `<span class="visually-hidden">= </span>${factorText(factors)}`;
 }
 
+// Shows every step that's due, once a frame.
+function reveal(now) {
+  frame = 0;
+  // Don't burst through a backlog that built up while the page wasn't drawing.
+  nextAt = paced ? Math.max(nextAt, now - 50) : now;
+  const fresh = [];
+  const added = document.createDocumentFragment();
+  const atBottom = tape.scrollHeight - tape.scrollTop - tape.clientHeight < 24;
+  while (arrived.length && nextAt <= now) {
+    const { step, term } = arrived.shift();
+    terms.push(term);
+    fresh.push(term);
+    rows.push(row(step, term));
+    added.append(rows.at(-1));
+    if (paced) nextAt += pause(step);
+  }
+  tape.append(added);
+  for (const [step, factors] of pending) {
+    if (step >= rows.length) continue;
+    setFactors(step, factors);
+    pending.delete(step);
+  }
+  if (atBottom) tape.scrollTop = tape.scrollHeight;
+  if (fresh.length) chart.add(fresh);
+  if (ending && !arrived.length) return finish();
+  tick();
+  if (arrived.length) frame = requestAnimationFrame(reveal);
+}
+
+const schedule = () => (frame ||= requestAnimationFrame(reveal));
+
 function tick() {
-  if (!follower || !terms.length) return;
+  if (!following || !terms.length) return;
   const k = terms.length - 1;
   const waiting = performance.now() - lastAt;
   status.textContent =
-    factorsOf[k] || waiting < 400
+    factorsOf[k] || arrived.length || waiting < 400
       ? `Step ${fmt(k)}: a ${terms[k].length}-digit number.`
       : `Step ${fmt(k)}: factoring a ${terms[k].length}-digit number… ${Math.floor(waiting / 1000)} s`;
 }
 
+// Ends the run on screen. The Stop key hides, so keyboard focus on it moves to the entry
+// rather than dropping out of the page; a tap leaves focus alone, so no keyboard pops up.
 function halt() {
   follower?.terminate();
   follower = null;
+  following = false;
   clearInterval(timer);
   cancelAnimationFrame(frame);
   frame = 0;
+  if (stopKey.matches(':focus-visible')) input.focus();
   stopKey.hidden = true;
+  status.textContent = '';
 }
 
-function follow(n, { write = true } = {}) {
+function finish() {
+  halt();
+  chart.finish(ending.end, ending.loopStart);
+  verdict.textContent = describe(ending.end, ending.loopStart);
+}
+
+function follow(n, { write = true, animate = true } = {}) {
   halt();
   start = n;
   terms = [];
   factorsOf = [];
   rows = [];
-  queue = [];
+  arrived = [];
+  pending = new Map();
+  ending = null;
+  paced = animate && !reducedMotion.matches;
   tape.replaceChildren();
   chart.reset();
   readout.textContent = READOUT;
@@ -156,7 +192,6 @@ function follow(n, { write = true } = {}) {
   }
   if (write) history.replaceState(null, '', `#n=${n}`);
   verdict.textContent = `Following ${fmt(n)}…`;
-  status.textContent = '';
   let w;
   try {
     w = follower = worker();
@@ -166,22 +201,27 @@ function follow(n, { write = true } = {}) {
     verdict.textContent = "Your browser can't run the machine.";
     return;
   }
+  following = true;
   stopKey.hidden = false;
-  lastAt = performance.now();
+  nextAt = lastAt = performance.now();
   // Terminated workers go quiet, but a message already on its way could still land.
   w.addEventListener('message', ({ data }) => {
     if (follower !== w) return;
     lastAt = performance.now();
     if (data.end) {
-      flush();
-      halt();
-      chart.finish(data.end, data.loopStart);
-      status.textContent = '';
-      verdict.textContent = describe(data.end, data.loopStart);
-      return;
-    }
-    queue.push(data);
-    frame ||= requestAnimationFrame(flush);
+      ending = data;
+      follower.terminate();
+      follower = null;
+    } else if (data.term !== undefined) {
+      // Pace credit only builds up while frames are behind, not while waiting on the worker.
+      if (!arrived.length) nextAt = Math.max(nextAt, performance.now());
+      arrived.push(data);
+    } else if (data.step < rows.length) {
+      // Its row is already on the tape, so show the factors now: a Stop before the next
+      // frame shouldn't lose what took seconds to find.
+      setFactors(data.step, data.factors);
+    } else pending.set(data.step, data.factors);
+    schedule();
   });
   w.addEventListener('error', event => {
     event.preventDefault();
@@ -194,11 +234,7 @@ function follow(n, { write = true } = {}) {
 }
 
 stopKey.addEventListener('click', () => {
-  flush();
-  // The key is about to hide, so keyboard focus moves to the entry rather than dropping out.
-  input.focus();
   halt();
-  status.textContent = '';
   verdict.textContent = stoppedText();
 });
 
@@ -317,4 +353,4 @@ function fromHash() {
 }
 
 window.addEventListener('hashchange', fromHash);
-if (!fromHash()) follow(138n, { write: false });
+if (!fromHash()) follow(138n, { write: false, animate: false });
