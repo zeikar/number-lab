@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aliquot sequences | Number Lab</title>
-  <meta name="description" content="Add up a number's divisors, then do it again. Most numbers fall to 0, a few loop forever, and 276 climbs past 200 digits without anyone knowing where it ends. Follow any start in your browser.">
+  <meta name="description" content="Add up a number's divisors, then do it again. Most numbers fall to 0, a few loop forever, and 276 is still climbing: computers have followed it past 200 digits without finding where it ends. Follow any start in your browser.">
   <link rel="canonical" href="https://zeikar.dev/number-lab/aliquot/">
   <link rel="icon" href="../favicon.svg">
   <meta name="theme-color" content="#d5dbd3" media="(prefers-color-scheme: light)">
@@ -82,7 +82,7 @@
 
         <div class="run-head">
           <button type="button" class="key" id="walk">Follow all 1,000</button>
-          <p class="run-status" id="walk-status">They all walk together, faster and faster. Watch which squares stay empty.</p>
+          <p class="run-status" id="walk-status">Your browser follows all 1,000 first, then replays them side by side, speeding up tenfold every second. Watch which squares stay empty.</p>
           <p class="visually-hidden" id="walk-announce" aria-live="polite"></p>
         </div>
 
@@ -106,9 +106,10 @@
     <section class="notes" aria-labelledby="notes-title">
       <h2 id="notes-title">Where they go</h2>
       <p>Most sequences hit a prime, whose only divisor below itself is 1, and 1 goes to 0. Some land on a perfect number like 6 and stay there. Some fall into a pair: the divisors of 220 add up to 284, and those of 284 add up to 220. Amicable pairs like that were known to the Pythagoreans, yet the second smallest, 1,184 and 1,210, was overlooked until a 16-year-old, Nicolò Paganini (not the violinist), found it in 1867. In 1918 Paul Poulet found longer loops: 12,496 comes back to itself after 5 steps, and 14,316 after 28.</p>
-      <p>Below 1,000, every start ends one of those ways except twelve: the Lehmer five, 276, 552, 564, 660 and 966, and seven more that run into them: 306, 396 and 696 into 276, 780 into 564, 828 and 996 into 660, and 888 into 552. By October 2026, computers had followed 276 for 2,162 steps, to a 215-digit number. The next step needs a 210-digit number factored, and nobody has managed it yet. 840 climbs past 25 digits too, but it comes back down: it reaches 0 after 749 steps.</p>
+      <p>Below 1,000, every start ends one of those ways except twelve: the Lehmer five, 276, 552, 564, 660 and 966, and seven more that run into them: 306, 396 and 696 into 276, 780 into 564, 828 and 996 into 660, and 888 into 552. By October 2026, computers <a href="https://factordb.com/sequences.php?se=1&amp;aq=276&amp;action=last20">had followed 276 for 2,162 steps</a>, to a 215-digit number. The next step needs a 210-digit number factored, and nobody has managed it yet. 840 climbs past 25 digits too, but it comes back down: it <a href="https://factordb.com/sequences.php?se=1&amp;aq=840&amp;action=last20">reaches 0 after 748 steps</a>.</p>
       <p>And nothing leads to 276: no number's divisors add up to it, which makes it one of the untouchable numbers, like 2, 5, 52, 88 and 96.</p>
       <p>The Catalan–Dickson conjecture says every aliquot sequence ends or loops. Richard Guy and John Selfridge doubted it, and thought some climb forever. Nobody has proved it either way.</p>
+      <p>Every step means factoring a number. The machine splits it with Pollard's rho method and checks that each piece is prime with the Miller–Rabin test, using the 13 primes up to 41. That's a proof below 3,317,044,064,679,887,385,961,981, about 3.3 × 10<sup>24</sup>, the smallest composite that passes all 13 (<a href="https://arxiv.org/abs/1509.00864">Sorenson and Webster, 2015</a>). From there up, the machine adds 20 rounds with random bases, and a composite gets through all of them less than once in a trillion tries. So a factor that big is almost certainly prime, but not proved prime.</p>
     </section>
 
     <footer class="site-foot">

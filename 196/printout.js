@@ -207,7 +207,10 @@ export function createPrintout({ canvas, onStep, onPalindrome }) {
     last = now;
     if (zoom && now - zoom.start >= ZOOM_MS) zoom = null;
     if (!zoom) {
-      if (steps >= SLOW_LINES) rate = Math.min(MAX_RATE, rate * 2 ** (dt / 1000 / DOUBLE_S));
+      // The slow start and the speed-up are only pacing, and with no end to jump to, reduced
+      // motion gets the run at full speed from the first frame.
+      if (reducedMotion.matches) rate = MAX_RATE;
+      else if (steps >= SLOW_LINES) rate = Math.min(MAX_RATE, rate * 2 ** (dt / 1000 / DOUBLE_S));
       allowance += (rate * dt) / 1000;
       const deadline = performance.now() + BUDGET_MS;
       while (allowance >= 1 && !zoom) {

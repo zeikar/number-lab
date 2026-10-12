@@ -25,7 +25,7 @@ A component lives in its experiment's stylesheet until a second experiment needs
 1. Create the folder. Its page loads `../style.css`, then its own `style.css`, and carries the same head as [6174/index.html](6174/index.html): canonical URL, OG tags and the `theme-color` pair.
 2. Put the arithmetic in a pure module and test it. Every number the page states (counts, bounds, step totals) is computed and asserted in a test, not typed from memory. Edge cases count too: 6174's copy first ignored the ten repdigits.
 3. Add a card to [index.html](index.html), a `<url>` to [sitemap.xml](sitemap.xml) and a section to [README.md](README.md).
-4. Credit the source video by link in the page footer and the README.
+4. Credit the source video by link in the page footer and the README. A record the page quotes but the browser doesn't compute gets a link in the notes to a page that states it.
 5. Make `og.png` at 1200×630, PNG: build a throwaway page that lays out the experiment's signature view, screenshot it, and don't commit the page.
 
 The zeikar.github.io repo already lists this site's `sitemap.xml` in its sitemap index and `robots.txt`, so new pages don't need changes there.

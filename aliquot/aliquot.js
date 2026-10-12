@@ -12,7 +12,13 @@ const SMALL = [];
     for (let j = i * i; j < SIEVE; j += i) composite[j] = 1;
   }
 }
-const BASES = SMALL.slice(0, 13); // Miller–Rabin with the primes to 41 is exact below 3.3 × 10^24
+// Miller–Rabin with the primes to 41 as bases proves n prime below PROVEN_BELOW, the
+// smallest composite that passes all thirteen (OEIS A014233). From there up, each test adds
+// random bases too: each one catches a composite at least three times in four, so a
+// composite gets past all 20 less than once in 10^12 tries.
+const BASES = SMALL.slice(0, 13);
+export const PROVEN_BELOW = 3_317_044_064_679_887_385_961_981n;
+export const RANDOM_BASES = 20;
 
 function powMod(base, exp, mod) {
   let result = 1n;
@@ -24,19 +30,29 @@ function powMod(base, exp, mod) {
   return result;
 }
 
+// A base from 2 to n − 2, drawn from 64 more random bits than n has, so the bias is negligible.
+function randomBase(n) {
+  const words = crypto.getRandomValues(new Uint32Array(Math.ceil(n.toString(2).length / 32) + 2));
+  let r = 0n;
+  for (const w of words) r = (r << 32n) | BigInt(w);
+  return 2n + (r % (n - 3n));
+}
+
 export function isPrime(n) {
   if (n < 2n) return false;
   for (const p of BASES) if (n % p === 0n) return n === p;
   let d = n - 1n;
   let s = 0;
   for (; !(d & 1n); s++) d >>= 1n;
-  for (const a of BASES) {
+  // Whether a shows n is composite.
+  const witness = a => {
     let x = powMod(a, d, n);
-    if (x === 1n || x === n - 1n) continue;
-    let i = 1;
-    for (; i < s && x !== n - 1n; i++) x = (x * x) % n;
-    if (x !== n - 1n) return false;
-  }
+    if (x === 1n || x === n - 1n) return false;
+    for (let i = 1; i < s && x !== n - 1n; i++) x = (x * x) % n;
+    return x !== n - 1n;
+  };
+  if (BASES.some(witness)) return false;
+  for (let k = 0; n >= PROVEN_BELOW && k < RANDOM_BASES; k++) if (witness(randomBase(n))) return false;
   return true;
 }
 
@@ -141,8 +157,10 @@ export const ON_276 = [276, 306, 396, 696];
 // As far as computers have taken 276: FactorDB, October 2026. The next step needs a
 // 210-digit number factored.
 export const RECORD = { steps: 2162, digits: 215, stuck: 210 };
-// 840 climbs past what the page follows but comes back down (OEIS A098007).
-export const FINISHED = { 840: 749 };
+// 840 climbs past what the page follows but comes back down: FactorDB has it at 0 after
+// 748 steps. A 2004 comment on OEIS A098007 says "after 749 iterations", which matches
+// 749 terms counting 840 and 0, the way that sequence counts.
+export const FINISHED = { 840: 748 };
 export const SURVEY = 1000; // starts in the grid
 export const SURVEY_DIGITS = 25; // where the grid stops following; factoring stays quick below this
 

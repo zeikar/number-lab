@@ -2,7 +2,7 @@ import { WALK_STEPS, MAX_DRAWN, MAX_REACHED, createWalker, terms, parseNumber } 
 import { createArcs } from './arcs.js';
 import { createGaps } from './gaps.js';
 
-// From OEIS A064227: far past what a browser walks.
+// From OEIS A057167's b-file: far past what a browser walks.
 const KNOWN = { 1355: '325,374,625,245', 2406: '394,178,473,633,984' };
 
 const $ = id => document.getElementById(id);
@@ -139,6 +139,8 @@ stepSlider.addEventListener('input', () => {
 let plays = 0;
 playButton.addEventListener('click', async () => {
   if (arcs.playing) return;
+  // With reduced motion the arcs are already all drawn, so Play only plays the notes.
+  if (reducedMotion.matches && !soundOn) return;
   const id = ++plays;
   playButton.setAttribute('aria-disabled', 'true');
   await arcs.play();

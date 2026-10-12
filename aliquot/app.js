@@ -263,6 +263,8 @@ const GRID_READOUT = gridReadout.textContent;
 const legendCounts = [...document.querySelectorAll('.legend [data-count]')];
 let survey = null;
 
+if (reducedMotion.matches) walkStatus.textContent = 'Your browser follows all 1,000, then fills in the grid at once. See which squares stay empty.';
+
 function story(n, r) {
   if (!r) return `${fmt(n)}: still walking.`;
   if (r.end === 'zero') {

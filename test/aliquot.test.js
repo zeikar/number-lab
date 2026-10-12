@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { isPrime, factor, next, follow, survey, binOf, EDGES, OPEN, UNSOLVED, ON_276, parseNumber } from '../aliquot/aliquot.js';
+import { isPrime, PROVEN_BELOW, RANDOM_BASES, factor, next, follow, survey, binOf, EDGES, OPEN, UNSOLVED, ON_276, parseNumber } from '../aliquot/aliquot.js';
 
 const big = list => list.map(BigInt);
 
@@ -13,6 +13,35 @@ test('factor splits numbers with big prime factors', () => {
   assert.equal(show(1000000007n * 998244353n * 1000000009n), '998244353^1 1000000007^1 1000000009^1');
   assert.equal(isPrime(561n), false); // a Carmichael number
   assert.equal(isPrime(2n ** 61n - 1n), true);
+});
+
+// ψ13, the smallest composite that passes Miller–Rabin for every prime base up to 41
+// (OEIS A014233), and a 25-digit number, so it's inside the grid's range.
+test('isPrime catches 3,317,044,064,679,887,385,961,981, which fools the primes to 41', () => {
+  const psi13 = 3_317_044_064_679_887_385_961_981n;
+  const powMod = (b, e, m) => {
+    let r = 1n;
+    for (b %= m; e; e >>= 1n, b = (b * b) % m) if (e & 1n) r = (r * b) % m;
+    return r;
+  };
+  const passes = a => {
+    let d = psi13 - 1n;
+    let s = 0;
+    for (; !(d & 1n); s++) d >>= 1n;
+    let x = powMod(a, d, psi13);
+    for (let i = 0; i < s; i++, x = (x * x) % psi13) if (x === psi13 - 1n || (i === 0 && x === 1n)) return true;
+    return false;
+  };
+  assert.ok(big([2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41]).every(passes));
+  assert.equal(PROVEN_BELOW, psi13);
+  assert.equal(isPrime(psi13), false);
+  // From there up, 20 random rounds: each lets a composite through at most a quarter of the time.
+  assert.equal(RANDOM_BASES, 20);
+  assert.ok(0.25 ** RANDOM_BASES < 1e-12);
+  assert.deepEqual([...factor(psi13)], [[1287836182261n, 1], [2575672364521n, 1]]);
+  // Primes past it still come out prime.
+  assert.equal(isPrime(2n ** 89n - 1n), true);
+  assert.equal(isPrime(2n ** 127n - 1n), true);
 });
 
 test('next adds up the divisors below n', () => {
@@ -95,7 +124,7 @@ test('OEIS: seven more starts below 1,000 run into the open five', () => {
   assert.deepEqual(OPEN, big([276, 552, 564, 660, 966]));
   assert.deepEqual(UNSOLVED, Object.keys(joins).map(Number));
   assert.deepEqual(ON_276, UNSOLVED.filter(n => joins[n] === 276));
-  // 840 runs into none of them; it climbs past 25 digits and comes back down (OEIS A098007: 0 after 749 steps).
+  // 840 runs into none of them; it climbs past 25 digits and comes back down (FactorDB: 0 after 748 steps).
   assert.equal(results[839].joins, undefined);
 });
 

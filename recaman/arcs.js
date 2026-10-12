@@ -150,7 +150,7 @@ export function createArcs({ canvas, onStep }) {
   }
 
   // Draws the jumps one at a time, calling onStep(n, value) as each one starts. With reduced
-  // motion each arc appears whole instead of sweeping out.
+  // motion the drawing stays whole, and only the onStep calls keep their pace.
   function play() {
     const id = ++playId;
     playing = true;
@@ -160,7 +160,8 @@ export function createArcs({ canvas, onStep }) {
       if (id === playId) playing = false;
       return done;
     };
-    shown = 0;
+    shown = reducedMotion.matches ? steps : 0;
+    partial = 1;
     draw();
     return new Promise(resolve => {
       let n = 0;
@@ -177,10 +178,12 @@ export function createArcs({ canvas, onStep }) {
           n++;
           started = now;
           length = LAST_MS + (FIRST_MS - LAST_MS) * Math.exp(-n / 15);
-          shown = n;
           onStep(n, list[n]);
         }
-        partial = reducedMotion.matches ? 1 : Math.min(1, (now - started) / (length * SWEEP));
+        // Read every frame, so switching reduced motion on mid-play shows every jump at once.
+        const still = reducedMotion.matches;
+        shown = still ? steps : n;
+        partial = still ? 1 : Math.min(1, (now - started) / (length * SWEEP));
         draw();
         requestAnimationFrame(frame);
       };
