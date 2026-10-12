@@ -13,7 +13,7 @@ Number Lab: small browser toys for famous number facts, most of them from Number
 
 ## Layout
 
-- [index.html](index.html) — the lab home, one card per experiment
+- [index.html](index.html) — the lab home, one card per experiment; its share image is [og.png](og.png), a bench of four experiments' views made the same way as theirs
 - [style.css](style.css) — shared tokens, type, page shell, `.key` buttons, and the machine parts experiments share: page layout, machine panel, entry form and preset keys, digit tiles, paper tape, histogram, colour swatch, notes
 - `<experiment>/` — its own `index.html`, `style.css`, a pure logic module, UI scripts and `og.png`
 - [test/](test/) — tests for each experiment's logic module
