@@ -282,6 +282,19 @@ p {
   color: color-mix(in srgb, var(--ink) 35%, transparent);
 }
 
+/* For turns, fractions and long numbers, which need more room than a few digits. */
+.entry--wide input {
+  max-width: 12ch;
+  letter-spacing: 0.04em;
+}
+
+.slider {
+  display: block;
+  width: 100%;
+  margin: 0;
+  accent-color: var(--key);
+}
+
 .hint {
   margin-top: 8px;
   color: var(--ink-soft);
@@ -426,6 +439,51 @@ p {
   color: var(--ink-soft);
   font-size: 0.9rem;
   text-align: center;
+}
+
+/* A button that sets a chart running, with its status beside it. */
+
+.run-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+  max-width: 560px;
+  margin-bottom: 14px;
+}
+
+/* Room for three lines, so the chart doesn't jump as the status changes. */
+.run-status {
+  display: flex;
+  flex: 1 1 16rem;
+  align-items: center;
+  min-height: 4.65em;
+  font-weight: 600;
+}
+
+/* The line under a chart that reads out what's pointed at. */
+.pointer-readout {
+  max-width: 560px;
+  min-height: 3.1em;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* A colour key's square */

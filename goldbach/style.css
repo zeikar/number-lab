@@ -18,24 +18,6 @@
 
 /* The comet */
 
-.comet-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px 16px;
-  max-width: 560px;
-  margin-bottom: 14px;
-}
-
-/* Room for three lines, so the comet doesn't jump as the status changes. */
-.comet-status {
-  display: flex;
-  flex: 1 1 16rem;
-  align-items: center;
-  min-height: 4.65em;
-  font-weight: 600;
-}
-
 .comet-frame {
   max-width: 560px;
 }
@@ -50,34 +32,10 @@
   cursor: crosshair;
 }
 
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 18px;
-  margin: 12px 0 0;
-  padding: 0;
-  list-style: none;
-  color: var(--ink-soft);
-  font-size: 0.95rem;
-}
-
-.legend li {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
 .swatch--three {
   background: var(--r6);
 }
 
 .swatch--rest {
   background: var(--r2);
-}
-
-.comet-readout {
-  max-width: 560px;
-  min-height: 3.1em;
-  margin-top: 10px;
-  font-weight: 600;
 }

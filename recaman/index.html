@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recamán's sequence | Number Lab</title>
+  <meta name="description" content="Jump back if you can, forward if you can't. Draw Recamán's sequence as arcs, look up when it first lands on your number, and watch it skip 1,355 for 10 million steps.">
+  <link rel="canonical" href="https://zeikar.dev/number-lab/recaman/">
+  <link rel="icon" href="../favicon.svg">
+  <meta name="theme-color" content="#d5dbd3" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1b201e" media="(prefers-color-scheme: dark)">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zeikar.dev/number-lab/recaman/">
+  <meta property="og:title" content="Recamán's sequence">
+  <meta property="og:description" content="Jump back if you can, forward if you can't. Does the walk ever land on every number? Nobody knows.">
+  <meta property="og:image" content="https://zeikar.dev/number-lab/recaman/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The first 65 jumps of Recamán's sequence drawn as half circles above and below a number line, beside a grid of the numbers below 2,000 shaded by when the walk first reaches them.">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Courier+Prime:wght@400;700&display=swap">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <div class="page">
+    <nav class="lab-bar" aria-label="Site">
+      <a href="../">Number Lab</a>
+      <a href="https://zeikar.dev/">zeikar.dev</a>
+    </nav>
+
+    <noscript><p class="noscript">The arcs and the grid need JavaScript to run.</p></noscript>
+
+    <main class="toy">
+      <div class="bench">
+        <header class="intro">
+          <h1>Recamán's sequence</h1>
+          <p class="lede">Start at 0. On step n, jump back n if that lands on a number above 0 you haven't visited; otherwise jump forward n. That gives 0, 1, 3, 6, 2, 7, 13, 20, 12, 21, 11, … Draw each jump as a half circle and the arcs weave a pattern. Does the walk land on every number eventually? Nobody knows.</p>
+        </header>
+
+        <section class="machine" aria-labelledby="machine-title">
+          <h2 id="machine-title" class="visually-hidden">The walk</h2>
+          <canvas class="arcs" id="arcs" role="img" aria-label="The first jumps of Recamán's sequence drawn as half circles over a number line, alternating above and below."></canvas>
+
+          <div class="arc-controls">
+            <label for="steps" id="step-count">65 steps</label>
+            <input type="range" class="slider" id="steps" min="5" max="400" value="65">
+            <div class="arc-keys">
+              <button type="button" class="key" id="play">Play</button>
+              <button type="button" class="key key--plain sound" id="sound" aria-pressed="false">Sound</button>
+            </div>
+          </div>
+
+          <form class="entry entry--wide" id="entry" novalidate>
+            <label for="number">When does it first land on…</label>
+            <div class="entry-row">
+              <input id="number" name="number" type="text" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="42" aria-describedby="hint">
+              <button type="submit" class="key">Find</button>
+            </div>
+            <p class="hint" id="hint" aria-live="polite">Any whole number up to 999,999,999. The browser walks up to 10 million steps to find it.</p>
+          </form>
+
+          <p class="verdict" id="verdict" aria-live="polite">Back when it can, forward when it can't. Type a number to see when the walk first lands on it.</p>
+        </section>
+      </div>
+
+      <section class="gaps" aria-labelledby="gaps-title">
+        <h2 id="gaps-title">The numbers it skips</h2>
+        <p class="section-lede">Each square is a number from 0 to 1,999, filled in when the walk first lands on it and shaded by how many steps that took. The empty ones haven't been reached yet. Point at one to see it, and tap it to look it up.</p>
+
+        <div class="run-head">
+          <button type="button" class="key" id="walk">Walk 10 million steps</button>
+          <p class="run-status" id="walk-status">The walk speeds up tenfold every second. Watch which squares stay empty.</p>
+          <p class="visually-hidden" id="walk-announce" aria-live="polite"></p>
+        </div>
+
+        <canvas class="gaps-grid" id="gaps" role="img" aria-label="A 50 by 40 grid of the numbers 0 to 1,999. After the walk, every square is filled except 1,355, 1,643 and 1,814."></canvas>
+
+        <ul class="legend" aria-label="Steps to first land on a number">
+          <li><span class="swatch" style="background: var(--r1)"></span>Up to 10 steps <span class="count" data-bin="0"></span></li>
+          <li><span class="swatch" style="background: var(--r2)"></span>Up to 100 <span class="count" data-bin="1"></span></li>
+          <li><span class="swatch" style="background: var(--r3)"></span>Up to 1,000 <span class="count" data-bin="2"></span></li>
+          <li><span class="swatch" style="background: var(--r4)"></span>Up to 10,000 <span class="count" data-bin="3"></span></li>
+          <li><span class="swatch" style="background: var(--r5)"></span>Up to 100,000 <span class="count" data-bin="4"></span></li>
+          <li><span class="swatch" style="background: var(--r6)"></span>Up to 1,000,000 <span class="count" data-bin="5"></span></li>
+        </ul>
+        <p class="pointer-readout" id="gaps-readout">19 is a famous holdout: it isn't reached until step 99,734.</p>
+      </section>
+    </main>
+
+    <section class="notes" aria-labelledby="notes-title">
+      <h2 id="notes-title">The numbers that hold out</h2>
+      <p>Most small numbers turn up fast, but a few are skipped for ages. 19 isn't reached until step 99,734. Once it is, the smallest number still missing jumps to 61, which waits until step 181,653; then 879, until step 328,002; then 1,355. Your browser can walk 10 million steps, and 1,355 is still missing at the end, along with 1,643 and 1,814 below 2,000.</p>
+      <p>1,355 does turn up eventually, at step 325,374,625,245. In 2001 Allan Wilks walked 10<sup>15</sup> steps: every number below 852,655 had appeared, but not 852,655 itself. Benjamin Chaffin has since pushed past 10<sup>612</sup> steps, and 852,655 is still missing.</p>
+      <p>Bernardo Recamán Santos sent the sequence to Neil Sloane in a letter in 1991, and Sloane conjectured that every number eventually appears. In 2017 he added that he's no longer so sure. The walk can land on a number twice, too: 42 is the first, reached at step 20 and again at step 24.</p>
+    </section>
+
+    <footer class="site-foot">
+      <p>Numberphile tells the story in <a href="https://www.youtube.com/watch?v=FGC5TdIiT9U">The Slightly Spooky Recamán Sequence</a>, with Alex Bellos.</p>
+      <p><a href="../">Number Lab</a> is made by <a href="https://zeikar.dev/">zeikar</a>. <a href="https://github.com/zeikar/number-lab">Source on GitHub</a>.</p>
+    </footer>
+  </div>
+</body>
+</html>

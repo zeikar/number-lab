@@ -35,16 +35,8 @@
 
 /* The controls */
 
-.entry input {
-  max-width: 12ch;
-  letter-spacing: 0.04em;
-}
-
-.slider {
-  display: block;
-  width: 100%;
-  margin: 18px 0 0;
-  accent-color: var(--key);
+.controls > .slider {
+  margin-top: 18px;
 }
 
 .presets {

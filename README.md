@@ -38,6 +38,14 @@ Drag the turn, type one (a decimal, a fraction, `pi`, `e`, `phi`, `√2`), or tr
 
 Based on Numberphile's [The Golden Ratio (why it is so irrational)](https://www.youtube.com/watch?v=sj8Sg8qnjOg).
 
+### [Recamán's sequence](https://zeikar.dev/number-lab/recaman/)
+
+Start at 0. On step n, jump back n if that lands on a new number above 0; otherwise jump forward n. Does the walk land on every number eventually? Nobody knows.
+
+The machine draws each jump as a half circle, above and below the line in turn, with a slider for how many and **Play** (with optional sound) to watch them weave. Type a number to see the step where the walk first lands on it: 42 at step 20, 19 not until step 99,734. **Walk 10 million steps** fills in a grid of the numbers below 2,000 as the walk reaches them, speeding up tenfold every second; 1,355, 1,643 and 1,814 are still empty at the end. 1,355 first turns up at step 325,374,625,245, and 852,655 is still missing after 10⁶¹² steps. Links like `recaman/#n=42` look up that number.
+
+Based on Numberphile's [The Slightly Spooky Recamán Sequence](https://www.youtube.com/watch?v=FGC5TdIiT9U).
+
 ## Run locally
 
 No build step. Serve the folder with any static server:
